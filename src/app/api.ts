@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { PoolDto, PoolInfoDto, OwnerPoolParams, AccountMetaDto } from "./dto";
+import { PoolDto, OwnerPoolParams, AccountMetaDto } from "./dto";
 
 const DEV = import.meta.env.DEV;
 
@@ -10,18 +10,14 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: apiUrl,
   }),
+  tagTypes: ["Pool"],
   endpoints: (builder) => ({
-    pools: builder.query<PoolInfoDto[], { owner: string }>({
+    pools: builder.query<PoolDto[], { owner: string }>({
       query: (params) => ({
         url: "/pool",
         params,
       }),
-    }),
-    pool: builder.query<PoolDto, OwnerPoolParams>({
-      query: ({ pool_id, ...params }) => ({
-        url: `/pool/${pool_id}`,
-        params,
-      }),
+      providesTags: ["Pool"],
     }),
     activatePool: builder.mutation<AccountMetaDto, OwnerPoolParams>({
       query: (body) => ({
@@ -29,8 +25,9 @@ export const api = createApi({
         url: "/pool/activate",
         body,
       }),
+      invalidatesTags: ["Pool"],
     }),
   }),
 });
 
-export const { usePoolsQuery, usePoolQuery, useActivatePoolMutation } = api;
+export const { usePoolsQuery, useActivatePoolMutation } = api;

@@ -1,5 +1,5 @@
 import { ConnectButton } from "@mysten/dapp-kit";
-import { ChevronDownIcon } from "@heroicons/react/16/solid";
+// import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useLocation, Outlet, useNavigate } from "react-router-dom";
 import {
   Sidebar,
@@ -11,15 +11,15 @@ import {
   SidebarSection,
   SidebarSpacer,
   SidebarLayout,
-  Dropdown,
-  DropdownButton,
-  DropdownDivider,
-  DropdownItem,
-  DropdownLabel,
-  DropdownMenu,
+  // Dropdown,
+  // DropdownButton,
+  // DropdownDivider,
+  // DropdownItem,
+  // DropdownLabel,
+  // DropdownMenu,
 } from "@trade-project/ui-toolkit";
 import {
-  HomeIcon,
+  // HomeIcon,
   AtSymbolIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/20/solid";
@@ -35,11 +35,11 @@ export function Layout() {
       sidebar={
         <Sidebar>
           <SidebarHeader>
-            {/* <SidebarItem href="/">
+            <SidebarItem href="/">
               <Logo />
-              <SidebarLabel>Yield Terminal</SidebarLabel>
-            </SidebarItem> */}
-            <Dropdown>
+              <SidebarLabel className="pl-2">Yield Terminal</SidebarLabel>
+            </SidebarItem>
+            {/* <Dropdown>
               <DropdownButton as={SidebarItem}>
                 <Logo />
                 <SidebarLabel>Yield Terminal</SidebarLabel>
@@ -59,7 +59,7 @@ export function Layout() {
                   <DropdownLabel>Home</DropdownLabel>
                 </DropdownItem>
               </DropdownMenu>
-            </Dropdown>
+            </Dropdown> */}
           </SidebarHeader>
 
           <SidebarBody>
@@ -71,7 +71,7 @@ export function Layout() {
                 }}
               >
                 <AtSymbolIcon />
-                <SidebarLabel>Root</SidebarLabel>
+                <SidebarLabel>Pools</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
 

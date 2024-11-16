@@ -1,9 +1,9 @@
 import { Routes, Route, Link } from "react-router-dom";
 import { useCurrentAccount, useCurrentWallet } from "@mysten/dapp-kit";
 import { Layout } from "./layout/Layout";
-import { Root } from "../root/Root";
-import { Pool } from "../pool/Pool";
+import { Pools } from "../pools/Pools";
 import { ConnectWallet } from "../connectWallet/ConnectWallet";
+import { Dialogs } from "../dialogs/Dialogs";
 
 export function Router() {
   const currentWallet = useCurrentWallet();
@@ -39,11 +39,11 @@ export function Router() {
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Root />} />
-          <Route path="pool/:id" element={<Pool />} />
+          <Route index element={<Pools />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>
+      <Dialogs />
     </>
   );
 }
