@@ -21,7 +21,7 @@ import {
 import {
   // HomeIcon,
   AtSymbolIcon,
-  Cog6ToothIcon,
+  // Cog6ToothIcon,
 } from "@heroicons/react/20/solid";
 import Logo from "./Logo";
 
@@ -77,14 +77,14 @@ export function Layout() {
 
             <SidebarSpacer />
             <SidebarSection>
-              <SidebarItem
+              {/* <SidebarItem
                 onClick={() => {
                   alert("In Development...");
                 }}
               >
                 <Cog6ToothIcon />
                 <SidebarLabel>Settings</SidebarLabel>
-              </SidebarItem>
+              </SidebarItem> */}
             </SidebarSection>
           </SidebarBody>
 
