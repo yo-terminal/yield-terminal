@@ -14,6 +14,7 @@ export type PositionDto = {
   profit: number;
   profitValue: number;
   deposit: number;
+  balance: number;
 };
 
 export type PoolDto = {

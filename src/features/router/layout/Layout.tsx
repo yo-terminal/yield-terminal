@@ -21,6 +21,7 @@ import {
 import {
   // HomeIcon,
   AtSymbolIcon,
+  BriefcaseIcon,
   // Cog6ToothIcon,
 } from "@heroicons/react/20/solid";
 import Logo from "./Logo";
@@ -29,7 +30,6 @@ export function Layout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-
   return (
     <SidebarLayout
       sidebar={
@@ -37,7 +37,7 @@ export function Layout() {
           <SidebarHeader>
             <SidebarItem href="/">
               <Logo />
-              <SidebarLabel className="pl-2">Yield Terminal</SidebarLabel>
+              <SidebarLabel className="pl-2">Terminal</SidebarLabel>
             </SidebarItem>
             {/* <Dropdown>
               <DropdownButton as={SidebarItem}>
@@ -72,6 +72,15 @@ export function Layout() {
               >
                 <AtSymbolIcon />
                 <SidebarLabel>Pools</SidebarLabel>
+              </SidebarItem>
+              <SidebarItem
+                current={pathname === "/portfolio"}
+                onClick={() => {
+                  navigate("/portfolio");
+                }}
+              >
+                <BriefcaseIcon />
+                <SidebarLabel>Portfolio</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
 

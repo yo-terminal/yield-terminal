@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import {
-  useSuiClient,
-  useCurrentAccount,
-  useSignAndExecuteTransaction,
-} from "@mysten/dapp-kit";
+import { useCurrentAccount } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { OpenParams } from "./depositDialogSlice";
 import {
@@ -14,9 +10,10 @@ import {
   InputField,
   Spin,
 } from "@trade-project/ui-toolkit";
+import { useSignAndExecute2 } from "../../../app/hooks";
 
 type Props = OpenParams & {
-  onCancel: () => void;
+  onClose: () => void;
 };
 
 type FormInput = {
@@ -24,15 +21,16 @@ type FormInput = {
 };
 
 export function DepositForm({
+  poolId,
   coinType,
   recipientAddress,
   decimals,
   symbol,
-  onCancel,
+  onClose,
 }: Props) {
   const currentAccount = useCurrentAccount();
-  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
-  const suiClient = useSuiClient();
+  const { packageId, queueId, signAndExecute, suiClient } =
+    useSignAndExecute2();
   const [connected, setConnected] = useState(false);
   const [txStatus, setTxStatus] = useState("");
 
@@ -40,8 +38,8 @@ export function DepositForm({
     setConnected(!!currentAccount);
   }, [currentAccount]);
 
-  const handleSendTokens = async (amount: number | string) => {
-    if (!currentAccount || !amount || !recipientAddress) {
+  const handleSendTokens = async (depositValue: number | string) => {
+    if (!currentAccount || !depositValue || !recipientAddress) {
       setTxStatus("Please connect wallet and fill in all fields");
       return;
     }
@@ -59,7 +57,8 @@ export function DepositForm({
       // Transaction is used to construct and execute transactions on Sui
       const tx = new Transaction();
       // Convert amount to smallest unit
-      const amountInSmallestUnit = BigInt(parseFloat(amount as string) * 10 ** decimals);
+      const deposit = parseFloat(depositValue as string);
+      const amountInSmallestUnit = BigInt(deposit * 10 ** decimals);
       // Split the coin and get a new coin with the specified amount
       // This creates a new coin object with the desired amount to be transferred
       const [coin] = tx.splitCoins(coins[0].coinObjectId, [
@@ -70,14 +69,27 @@ export function DepositForm({
       tx.transferObjects([coin], tx.pure.address(recipientAddress));
       // Sign and execute the transaction block
       // This sends the transaction to the network and waits for it to be executed
-      signAndExecuteTransaction(
+
+      tx.moveCall({
+        arguments: [
+          tx.object(queueId),
+          tx.pure.u64(1),
+          tx.pure.option("string", JSON.stringify({ poolId, deposit })),
+        ],
+        target: `${packageId}::yield_terminal::push_action`,
+      });
+
+      signAndExecute(
         {
           transaction: tx,
         },
         {
           onSuccess: (result) => {
             console.log("Transaction result:", result);
-            setTxStatus(`Transaction successful. Digest: ${result.digest}`);
+            onClose();
+          },
+          onError: () => {
+            alert("Something went wrong");
           },
         }
       );
@@ -123,7 +135,7 @@ export function DepositForm({
       {txStatus && <p className="">{txStatus}</p>}
 
       <div className="flex justify-end mt-12 gap-2">
-        <Button plain disabled={isSubmitting} onClick={onCancel}>
+        <Button plain disabled={isSubmitting} onClick={onClose}>
           Cancel
         </Button>
         <Button disabled={isSubmitting || !connected} type="submit">

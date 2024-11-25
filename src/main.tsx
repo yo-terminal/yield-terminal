@@ -19,7 +19,7 @@ createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <SuiClientProvider networks={networkConfig} defaultNetwork={DEV ? "devnet" : "mainnet"}>
+        <SuiClientProvider networks={networkConfig} defaultNetwork={DEV ? "testnet" : "mainnet"}>
           <WalletProvider autoConnect>
             <App />
           </WalletProvider>

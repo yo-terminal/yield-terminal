@@ -1,8 +1,10 @@
-
 /// Module: yield_terminal
 module yield_terminal::yield_terminal {
+    use sui::event;
     use std::string::{ String };
     use sui::table::{Self, Table};
+
+    const EINDEX_OUT_OF_BOUNDS: u64 = 0;
 
     public struct AdminCap has key {
         id: UID
@@ -15,7 +17,7 @@ module yield_terminal::yield_terminal {
         accessKey: String
     }
 
-    public struct ActionMessage has store {
+    public struct ActionMessage has store, drop, copy {
         index: u64,
         action: u64,
         owner: address,
@@ -62,7 +64,7 @@ module yield_terminal::yield_terminal {
         );
     }
 
-    public fun reset_account(account: Account) {
+    public fun remove_account(account: Account) {
         let Account {
             id,
             poolId: _,
@@ -72,22 +74,63 @@ module yield_terminal::yield_terminal {
         object::delete(id);
     }
 
-    public entry fun enqueue(
+    public fun queue_front(queue: &MessageQueue): u64 {
+        queue.front
+    }
+
+    public fun queue_back(queue: &MessageQueue): u64 {
+        queue.back
+    }
+
+    public fun peek_action(queue: &mut MessageQueue, i: u64): &ActionMessage {
+        if (i < queue.front || i >= queue.back) {
+            abort EINDEX_OUT_OF_BOUNDS
+        };
+
+        table::borrow(&queue.table, i)
+    }
+
+    public fun peek_action_from(queue: &MessageQueue, from: u64): vector<ActionMessage> {
+        let mut actions = vector::empty<ActionMessage>();
+        let mut i = from;
+
+        while (i < queue.back) {
+            let action_ref = table::borrow(&queue.table, i);
+            let action = *action_ref;
+            vector::push_back(&mut actions, action);
+            i = i + 1;
+        };
+
+        actions
+    }
+
+    public entry fun push_action(
         queue: &mut MessageQueue,
         action: u64,
         data: Option<String>,
         ctx: &mut TxContext
     ) {
-        table::add(
-            &mut queue.table,
-            queue.back,
-            ActionMessage {
-                action,
-                data,
-                index: queue.back,
-                owner: ctx.sender(),
-            }
-        );
+        let actionMessage = ActionMessage {
+            action,
+            data,
+            index: queue.back,
+            owner: ctx.sender(),
+        };
+        table::add(&mut queue.table, queue.back, actionMessage);
         queue.back = queue.back + 1;
+        event::emit(actionMessage);
+    }
+
+    public entry fun reset_queue_until(
+        _adminCap: &AdminCap,
+        queue: &mut MessageQueue,
+        until: u64,
+    ) {
+        let mut i = queue.front;
+        while (i < until) {
+            table::remove(&mut queue.table, i);
+            i = i + 1;
+        };
+        queue.front = until;
     }
 }

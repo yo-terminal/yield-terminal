@@ -2,10 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type OpenParams = {
   poolId: number;
-  coinType: string;
-  recipientAddress: string;
-  decimals: number;
-  symbol: string;
 };
 
 type State = {
@@ -18,19 +14,19 @@ const initialState: State = {
 };
 
 const slice = createSlice({
-  name: 'dialogs/depositDialog',
+  name: 'dialogs/closePositionDialog',
   initialState,
   reducers: {
-    openDepositDialog(state, action: PayloadAction<OpenParams>) {
+    openClosePositionDialog(state, action: PayloadAction<OpenParams>) {
       state.open = true;
       state.openParams = action.payload;
     },
-    closeDepositDialog(state) {
+    closeClosePositionDialog(state) {
       state.open = false;
       delete state.openParams;
     },
   },
 });
 
-export const { openDepositDialog, closeDepositDialog } = slice.actions;
+export const { openClosePositionDialog, closeClosePositionDialog } = slice.actions;
 export default slice.reducer;

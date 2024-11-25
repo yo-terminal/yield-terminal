@@ -2,6 +2,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import { useCurrentAccount, useCurrentWallet } from "@mysten/dapp-kit";
 import { Layout } from "./layout/Layout";
 import { Pools } from "../pools/Pools";
+import { Portfolio } from "../portfolio/Portfolio";
 import { ConnectWallet } from "../connectWallet/ConnectWallet";
 import { Dialogs } from "../dialogs/Dialogs";
 
@@ -40,6 +41,7 @@ export function Router() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Pools />} />
+          <Route path="portfolio" element={<Portfolio />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>

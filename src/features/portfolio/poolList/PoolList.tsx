@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Subheading,
   Table,
   TableBody,
@@ -9,8 +10,9 @@ import {
   TableRow,
 } from "@trade-project/ui-toolkit";
 import { usePoolsQuery } from "../../../app/api";
+import { ActionCell } from "./actionCell/ActionCell";
 import { useBackupAccounts } from "../../../app/hooks";
-import { PortfolioCell } from "./portfolioCell/PortfolioCell";
+import { isPortfolio } from "../../../common/utils";
 
 type Props = {
   className?: string;
@@ -19,26 +21,38 @@ type Props = {
 
 export function PoolList({ owner }: Props) {
   const { data = [] } = usePoolsQuery({ owner });
-  const { accountMap, isPending } = useBackupAccounts();
+  const { accountMap } = useBackupAccounts();
+
+  const portfolioPools = data.filter((pool) =>
+    isPortfolio(pool, accountMap[pool._id])
+  );
 
   return (
     <>
-      <Subheading>Pools</Subheading>
+      <Subheading>Portfolio</Subheading>
       <Table className="mt-4 [--gutter:theme(spacing.6)] lg:[--gutter:theme(spacing.10)]">
         <TableHead>
           <TableRow>
             {/* <TableHeader>Pool number</TableHeader> */}
+            <TableHeader>Status</TableHeader>
             <TableHeader>Name</TableHeader>
+            <TableHeader>Profit (%)</TableHeader>
+            <TableHeader>Balance</TableHeader>
 
             {/* <TableHeader>Asset</TableHeader> */}
-            <TableHeader className="text-right">Portfolio</TableHeader>
+            <TableHeader className="text-right">Action</TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((pool) => (
-            <TableRow key={pool._id} title={`Order #${pool._id}`}>
+          {portfolioPools.map((pool) => (
+            <TableRow key={pool._id} title={`Pool #${pool._id}`}>
               {/* <TableCell>{pool._id}</TableCell> */}
               {/* <TableCell className="text-slate-500">{pool.name}</TableCell> */}
+              <TableCell>
+                <Badge color={pool.status === "Active" ? "lime" : "slate"}>
+                  {pool.status}
+                </Badge>
+              </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
@@ -50,6 +64,12 @@ export function PoolList({ owner }: Props) {
                   </span>
                 </div>
               </TableCell>
+              <TableCell>
+                {pool.position ? pool.position.profit : "-"}
+              </TableCell>
+              <TableCell>
+                {pool.position ? pool.position.balance : "-"}
+              </TableCell>
 
               {/* <TableCell>
                 <div className="flex items-center gap-2">
@@ -58,13 +78,7 @@ export function PoolList({ owner }: Props) {
                 </div>
               </TableCell> */}
               <TableCell className="text-right">
-                {!isPending && (
-                  <PortfolioCell
-                    pool={pool}
-                    owner={owner}
-                    backupAccount={accountMap[pool._id]}
-                  />
-                )}
+                <ActionCell pool={pool} />
               </TableCell>
             </TableRow>
           ))}

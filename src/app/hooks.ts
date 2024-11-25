@@ -9,11 +9,12 @@ import {
 } from "@mysten/dapp-kit";
 import type { RootState, AppDispatch } from "./store";
 import { useNetworkVariable } from "./networkConfig";
+import { AccountModel } from "./model";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export function useOwnedObjects<T>(type: string) {
+export function useOwnedObjects<T>(type: "Account") {
   const packageId = useNetworkVariable("packageId");
   const account = useCurrentAccount();
   const { data, isPending, error, refetch } = useSuiClientQuery(
@@ -34,7 +35,8 @@ export function useOwnedObjects<T>(type: string) {
     return (
       (
         data?.data.filter(
-          (object) => object.data?.type === `${packageId}::yield_terminal::${type}`
+          (object) =>
+            object.data?.type === `${packageId}::yield_terminal::${type}`
         ) || []
       )
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,6 +54,7 @@ export function useOwnedObjects<T>(type: string) {
 
 export function useSignAndExecute() {
   const packageId = useNetworkVariable("packageId");
+  const queueId = useNetworkVariable("queueId");
   const suiClient = useSuiClient();
   const {
     mutate: signAndExecute,
@@ -72,8 +75,44 @@ export function useSignAndExecute() {
 
   return {
     packageId,
+    queueId,
     signAndExecute,
     isPending,
     error,
+    suiClient,
   };
+}
+
+export function useSignAndExecute2() {
+  const packageId = useNetworkVariable("packageId");
+  const queueId = useNetworkVariable("queueId");
+  const suiClient = useSuiClient();
+  const {
+    mutate: signAndExecute,
+    isPending,
+    error,
+  } = useSignAndExecuteTransaction();
+
+  return {
+    packageId,
+    queueId,
+    signAndExecute,
+    isPending,
+    error,
+    suiClient,
+  };
+}
+
+export function useBackupAccounts() {
+  const {
+    objects: accounts,
+    isPending,
+    error,
+    refetch,
+  } = useOwnedObjects<AccountModel>("Account");
+  const accountMap: Record<number, AccountModel> = {};
+  accounts.forEach((x) => {
+    accountMap[x.poolId] = x;
+  });
+  return { accounts, accountMap, isPending, error, refetch };
 }

@@ -20,7 +20,7 @@ export function DepositDialog() {
 
   return (
     <Modal title="Deposit" size="xl" open={open} onClose={closeDialog}>
-      <DepositForm {...openParams} onCancel={closeDialog} />
+      <DepositForm {...openParams} onClose={closeDialog} />
     </Modal>
   );
 }
