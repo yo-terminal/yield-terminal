@@ -3,15 +3,15 @@ import { Transaction } from "@mysten/sui/transactions";
 import { Button } from "@trade-project/ui-toolkit";
 import { useActivatePoolMutation } from "../../../../../app/api";
 import { OwnerPoolParams } from "../../../../../app/dto";
-import { useBackupAccounts, useSignAndExecute } from "../../../../../app/hooks";
-import { AccountModel } from "../../../../../app/model";
+import { usePoolAccounts, useSignAndExecute } from "../../../../../app/hooks";
+import { PoolAccountModel } from "../../../../../app/model";
 
 type Props = OwnerPoolParams & {
-  backupAccount: AccountModel | undefined;
+  poolAccount: PoolAccountModel | undefined;
 };
 
-export function Activate({ backupAccount, ...params }: Props) {
-  const { refetch } = useBackupAccounts();
+export function Activate({ poolAccount, ...params }: Props) {
+  const { refetch } = usePoolAccounts();
   const [activatePool, { isLoading }] = useActivatePoolMutation();
   const { packageId, signAndExecute, isPending } = useSignAndExecute();
 
@@ -24,7 +24,7 @@ export function Activate({ backupAccount, ...params }: Props) {
         activatePool(params)
           .unwrap()
           .then((data) => {
-            if (!backupAccount) {
+            if (!poolAccount) {
               const tx = new Transaction();
 
               tx.moveCall({
@@ -33,7 +33,7 @@ export function Activate({ backupAccount, ...params }: Props) {
                   tx.pure.address(data.address),
                   tx.pure.string(data.accessKey),
                 ],
-                target: `${packageId}::yield_terminal::backup_account`,
+                target: `${packageId}::yield_terminal::create_account`,
               });
 
               signAndExecute(

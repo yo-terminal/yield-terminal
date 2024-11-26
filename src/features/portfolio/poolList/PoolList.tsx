@@ -11,7 +11,7 @@ import {
 } from "@trade-project/ui-toolkit";
 import { usePoolsQuery } from "../../../app/api";
 import { ActionCell } from "./actionCell/ActionCell";
-import { useBackupAccounts } from "../../../app/hooks";
+import { usePoolAccounts } from "../../../app/hooks";
 import { isPortfolio } from "../../../common/utils";
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
 
 export function PoolList({ owner }: Props) {
   const { data = [] } = usePoolsQuery({ owner });
-  const { accountMap } = useBackupAccounts();
+  const { accountMap } = usePoolAccounts();
 
   const portfolioPools = data.filter((pool) =>
     isPortfolio(pool, accountMap[pool._id])

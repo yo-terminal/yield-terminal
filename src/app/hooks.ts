@@ -9,12 +9,12 @@ import {
 } from "@mysten/dapp-kit";
 import type { RootState, AppDispatch } from "./store";
 import { useNetworkVariable } from "./networkConfig";
-import { AccountModel } from "./model";
+import { PoolAccountModel } from "./model";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export function useOwnedObjects<T>(type: "Account") {
+export function useOwnedObjects<T>(type: "PoolAccount") {
   const packageId = useNetworkVariable("packageId");
   const account = useCurrentAccount();
   const { data, isPending, error, refetch } = useSuiClientQuery(
@@ -103,14 +103,14 @@ export function useSignAndExecute2() {
   };
 }
 
-export function useBackupAccounts() {
+export function usePoolAccounts() {
   const {
     objects: accounts,
     isPending,
     error,
     refetch,
-  } = useOwnedObjects<AccountModel>("Account");
-  const accountMap: Record<number, AccountModel> = {};
+  } = useOwnedObjects<PoolAccountModel>("PoolAccount");
+  const accountMap: Record<number, PoolAccountModel> = {};
   accounts.forEach((x) => {
     accountMap[x.poolId] = x;
   });

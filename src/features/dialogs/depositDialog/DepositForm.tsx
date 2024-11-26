@@ -70,6 +70,8 @@ export function DepositForm({
       // Sign and execute the transaction block
       // This sends the transaction to the network and waits for it to be executed
 
+      // tx.setGasBudget(amountInSmallestUnit / 10n);
+
       tx.moveCall({
         arguments: [
           tx.object(queueId),

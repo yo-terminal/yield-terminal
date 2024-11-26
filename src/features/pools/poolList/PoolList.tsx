@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@trade-project/ui-toolkit";
 import { usePoolsQuery } from "../../../app/api";
-import { useBackupAccounts } from "../../../app/hooks";
+import { usePoolAccounts } from "../../../app/hooks";
 import { PortfolioCell } from "./portfolioCell/PortfolioCell";
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
 
 export function PoolList({ owner }: Props) {
   const { data = [] } = usePoolsQuery({ owner });
-  const { accountMap, isPending } = useBackupAccounts();
+  const { accountMap, isPending } = usePoolAccounts();
 
   return (
     <>
@@ -62,7 +62,7 @@ export function PoolList({ owner }: Props) {
                   <PortfolioCell
                     pool={pool}
                     owner={owner}
-                    backupAccount={accountMap[pool._id]}
+                    poolAccount={accountMap[pool._id]}
                   />
                 )}
               </TableCell>

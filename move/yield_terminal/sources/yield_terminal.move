@@ -1,16 +1,15 @@
 /// Module: yield_terminal
 module yield_terminal::yield_terminal {
-    use sui::event;
     use std::string::{ String };
     use sui::table::{Self, Table};
 
-    const EINDEX_OUT_OF_BOUNDS: u64 = 0;
+    const QUEUE_EINDEX_OUT_OF_BOUNDS: u64 = 0;
 
     public struct AdminCap has key {
         id: UID
     }
 
-    public struct Account has key {
+    public struct PoolAccount has key {
         id: UID,
         poolId: u64,
         address: address,
@@ -47,14 +46,14 @@ module yield_terminal::yield_terminal {
         )
     }
 
-    public fun backup_account(
+    public fun create_account(
         poolId: u64,
         address: address,
         accessKey: String,
         ctx: &mut TxContext
     ) {
         transfer::transfer(
-            Account {
+            PoolAccount {
                 id: object::new(ctx),
                 poolId,
                 address,
@@ -64,8 +63,8 @@ module yield_terminal::yield_terminal {
         );
     }
 
-    public fun remove_account(account: Account) {
-        let Account {
+    public fun remove_account(account: PoolAccount) {
+        let PoolAccount {
             id,
             poolId: _,
             address: _,
@@ -84,7 +83,7 @@ module yield_terminal::yield_terminal {
 
     public fun peek_action(queue: &mut MessageQueue, i: u64): &ActionMessage {
         if (i < queue.front || i >= queue.back) {
-            abort EINDEX_OUT_OF_BOUNDS
+            abort QUEUE_EINDEX_OUT_OF_BOUNDS
         };
 
         table::borrow(&queue.table, i)
@@ -118,7 +117,6 @@ module yield_terminal::yield_terminal {
         };
         table::add(&mut queue.table, queue.back, actionMessage);
         queue.back = queue.back + 1;
-        event::emit(actionMessage);
     }
 
     public entry fun reset_queue_until(
