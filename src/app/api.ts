@@ -27,7 +27,15 @@ export const api = createApi({
       }),
       invalidatesTags: ["Pool"],
     }),
+    queueProcess: builder.mutation<void, void>({
+      query: (body) => ({
+        method: "POST",
+        url: "/queue/process",
+        body,
+      }),
+      invalidatesTags: ["Pool"],
+    }),
   }),
 });
 
-export const { usePoolsQuery, useActivatePoolMutation } = api;
+export const { usePoolsQuery, useActivatePoolMutation, useQueueProcessMutation } = api;

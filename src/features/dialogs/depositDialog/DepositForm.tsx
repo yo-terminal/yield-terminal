@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
@@ -10,7 +10,8 @@ import {
   InputField,
   Spin,
 } from "@trade-project/ui-toolkit";
-import { useSignAndExecute2 } from "../../../app/hooks";
+import { useSignAndExecute } from "../../../app/hooks";
+import { useQueueProcessMutation } from "../../../app/api";
 
 type Props = OpenParams & {
   onClose: () => void;
@@ -29,24 +30,31 @@ export function DepositForm({
   onClose,
 }: Props) {
   const currentAccount = useCurrentAccount();
-  const { packageId, queueId, signAndExecute, suiClient } =
-    useSignAndExecute2();
-  const [connected, setConnected] = useState(false);
+  const { packageId, queueId, signAndExecute, suiClient, isPending } = useSignAndExecute();
+  const [queueProcess, { isLoading }] = useQueueProcessMutation();
   const [txStatus, setTxStatus] = useState("");
 
-  useEffect(() => {
-    setConnected(!!currentAccount);
-  }, [currentAccount]);
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting },
+  } = useForm<FormInput>({
+    defaultValues: {
+      amount: 0,
+    },
+  });
+
+  const isProcessing = isPending || isLoading || isSubmitting;
 
   const handleSendTokens = async (depositValue: number | string) => {
-    if (!currentAccount || !depositValue || !recipientAddress) {
-      setTxStatus("Please connect wallet and fill in all fields");
+    if (!depositValue) {
+      setTxStatus("Please fill amount field");
       return;
     }
     try {
       // This uses the SuiClient to get coins of the specified type owned by the current address
       const { data: coins } = await suiClient.getCoins({
-        owner: currentAccount.address,
+        owner: currentAccount!.address,
         coinType,
       });
       if (coins.length === 0) {
@@ -59,9 +67,14 @@ export function DepositForm({
       // Convert amount to smallest unit
       const deposit = parseFloat(depositValue as string);
       const amountInSmallestUnit = BigInt(deposit * 10 ** decimals);
+      const objects = coins.map((x) => x.coinObjectId);
+
+      if (objects.length > 1) {
+        tx.mergeCoins(objects[0], objects.slice(1));
+      }
       // Split the coin and get a new coin with the specified amount
       // This creates a new coin object with the desired amount to be transferred
-      const [coin] = tx.splitCoins(coins[0].coinObjectId, [
+      const [coin] = tx.splitCoins(objects[0], [
         tx.pure.u64(amountInSmallestUnit),
       ]);
       // Transfer the split coin to the recipient
@@ -88,7 +101,9 @@ export function DepositForm({
         {
           onSuccess: (result) => {
             console.log("Transaction result:", result);
-            onClose();
+            queueProcess().then(() => {
+              onClose();
+            });
           },
           onError: () => {
             alert("Something went wrong");
@@ -102,16 +117,6 @@ export function DepositForm({
       );
     }
   };
-
-  const {
-    handleSubmit,
-    control,
-    formState: { isSubmitting },
-  } = useForm<FormInput>({
-    defaultValues: {
-      amount: 0,
-    },
-  });
 
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
     await handleSendTokens(data.amount);
@@ -137,11 +142,11 @@ export function DepositForm({
       {txStatus && <p className="">{txStatus}</p>}
 
       <div className="flex justify-end mt-12 gap-2">
-        <Button plain disabled={isSubmitting} onClick={onClose}>
+        <Button plain disabled={isProcessing} onClick={onClose}>
           Cancel
         </Button>
-        <Button disabled={isSubmitting || !connected} type="submit">
-          {isSubmitting && <Spin className="-ml-1 mr-2" />}
+        <Button disabled={isProcessing} type="submit">
+          {isProcessing && <Spin className="-ml-1 mr-2" />}
           Deposit
         </Button>
       </div>

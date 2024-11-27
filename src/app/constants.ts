@@ -1,7 +1,7 @@
-export const DEVNET_PACKAGE_ID = "0x9ceb7c34a3f8f82238c8bc5f042eba72e48ef4ac6caed72b92563c3a9f9f799b";
+export const DEVNET_PACKAGE_ID = "0xf45a87c9e11fdb31db1b410cd3fe317d6ea4c154e3d9efe46f09cbc5a428feeb";
 export const TESTNET_PACKAGE_ID = "0x21940049afb68ecf7076d95f024613ef776a5a6a585549b25dc79783408fb1d3";
 export const MAINNET_PACKAGE_ID = "0xTODO";
 
-export const DEVNET_QUEUE_ID = "0x93b6ea414bc64ed1a0719bb45e599fb9fe815c9d7d9bc167b0569c6162ecb2f4";
+export const DEVNET_QUEUE_ID = "0xd81a2cb99c6a9e990cd7fccbc156b6757e079dc3c966bd4dd3a013b9aecb8002";
 export const TESTNET_QUEUE_ID = "0x31ad6bf6afe36b9534b23b4b1a33ddd6e5427a5363c2794546782c4035bcb7b7";
 export const MAINNET_QUEUE_ID = "0xTODO";

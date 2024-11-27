@@ -20,7 +20,7 @@ module yield_terminal::yield_terminal {
         index: u64,
         action: u64,
         owner: address,
-        data: Option<String>,
+        dataJson: String,
     }
 
     public struct MessageQueue has key {
@@ -106,12 +106,12 @@ module yield_terminal::yield_terminal {
     public entry fun push_action(
         queue: &mut MessageQueue,
         action: u64,
-        data: Option<String>,
+        dataJson: String,
         ctx: &mut TxContext
     ) {
         let actionMessage = ActionMessage {
             action,
-            data,
+            dataJson,
             index: queue.back,
             owner: ctx.sender(),
         };

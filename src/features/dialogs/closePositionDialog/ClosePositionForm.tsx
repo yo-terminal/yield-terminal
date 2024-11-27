@@ -2,6 +2,7 @@ import { OpenParams } from "./closePositionDialogSlice";
 import { Button, Spin } from "@trade-project/ui-toolkit";
 import { Transaction } from "@mysten/sui/transactions";
 import { useSignAndExecute } from "../../../app/hooks";
+import { useQueueProcessMutation } from "../../../app/api";
 
 type Props = OpenParams & {
   onClose: () => void;
@@ -9,6 +10,9 @@ type Props = OpenParams & {
 
 export function ClosePositionForm({ poolId, onClose }: Props) {
   const { packageId, queueId, signAndExecute, isPending } = useSignAndExecute();
+  const [queueProcess, { isLoading }] = useQueueProcessMutation();
+
+  const isProcessing = isPending || isLoading;
 
   const handleClosePosition = () => {
     const tx = new Transaction();
@@ -27,7 +31,9 @@ export function ClosePositionForm({ poolId, onClose }: Props) {
       {
         onSuccess: (result) => {
           console.log("Transaction result:", result);
-          onClose();
+          queueProcess().then(() => {
+            onClose();
+          });
         },
         onError: () => {
           alert("Something went wrong");
@@ -39,11 +45,11 @@ export function ClosePositionForm({ poolId, onClose }: Props) {
   return (
     <div className="flex flex-col gap-3 p-2">
       <div className="flex justify-end mt-12 gap-2">
-        <Button plain disabled={isPending} onClick={onClose}>
+        <Button plain disabled={isProcessing} onClick={onClose}>
           Cancel
         </Button>
-        <Button disabled={isPending} onClick={handleClosePosition}>
-          {isPending && <Spin className="-ml-1 mr-2" />}
+        <Button disabled={isProcessing} onClick={handleClosePosition}>
+          {isProcessing && <Spin className="-ml-1 mr-2" />}
           Close Position
         </Button>
       </div>
