@@ -19,7 +19,6 @@ export type PositionDto = {
 
 export type PoolDto = {
   _id: number;
-  name: string;
   quote_url: string;
   asset_url: string;
   quote_symbol: string;
@@ -28,6 +27,7 @@ export type PoolDto = {
   quote_decimals: number;
   status: PoolStatus;
   position: PositionDto | null;
+  profit_30d: number;
 };
 
 export type AccountMetaDto = {

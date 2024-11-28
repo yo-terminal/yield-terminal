@@ -29,6 +29,7 @@ export function PoolList({ owner }: Props) {
           <TableRow>
             {/* <TableHeader>Pool number</TableHeader> */}
             <TableHeader>Name</TableHeader>
+            <TableHeader>Profit (30d)</TableHeader>
 
             {/* <TableHeader>Asset</TableHeader> */}
             <TableHeader className="text-right">Portfolio</TableHeader>
@@ -50,6 +51,7 @@ export function PoolList({ owner }: Props) {
                   </span>
                 </div>
               </TableCell>
+              <TableCell>{pool.profit_30d}%</TableCell>
 
               {/* <TableCell>
                 <div className="flex items-center gap-2">

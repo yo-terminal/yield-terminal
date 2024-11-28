@@ -36,7 +36,7 @@ export function PoolList({ owner }: Props) {
             {/* <TableHeader>Pool number</TableHeader> */}
             <TableHeader>Status</TableHeader>
             <TableHeader>Name</TableHeader>
-            <TableHeader>Profit (%)</TableHeader>
+            <TableHeader>Profit</TableHeader>
             <TableHeader>Balance</TableHeader>
 
             {/* <TableHeader>Asset</TableHeader> */}
@@ -65,7 +65,7 @@ export function PoolList({ owner }: Props) {
                 </div>
               </TableCell>
               <TableCell>
-                {pool.position ? pool.position.profit : "-"}
+                {pool.position ? `${pool.position.profit}%` : "-"}
               </TableCell>
               <TableCell>
                 {pool.position ? pool.position.balance : "-"}
