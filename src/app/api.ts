@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { PoolDto, OwnerPoolParams, AccountMetaDto } from "./dto";
+import { LineChartDto } from "@trade-project/ui-toolkit";
 
 // const DEV = import.meta.env.DEV;
 
@@ -36,7 +37,18 @@ export const api = createApi({
       }),
       invalidatesTags: ["Pool"],
     }),
+    balance: builder.query<LineChartDto, { index: number; until: number; owner: string }>({
+      query: (params) => ({
+        params,
+        url: "/balance",
+      }),
+    }),
   }),
 });
 
-export const { usePoolsQuery, useActivatePoolMutation, useQueueProcessMutation } = api;
+export const {
+  usePoolsQuery,
+  useActivatePoolMutation,
+  useQueueProcessMutation,
+  useBalanceQuery,
+} = api;

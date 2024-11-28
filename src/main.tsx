@@ -11,7 +11,7 @@ import { networkConfig } from "./app/networkConfig";
 import "./index.css";
 
 // eslint-disable-next-line react-refresh/only-export-components
-const DEV = import.meta.env.DEV;
+const DEV = false; // = import.meta.env.DEV;
 
 const queryClient = new QueryClient();
 
@@ -19,7 +19,10 @@ createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <SuiClientProvider networks={networkConfig} defaultNetwork={DEV ? "devnet" : "mainnet"}>
+        <SuiClientProvider
+          networks={networkConfig}
+          defaultNetwork={DEV ? "devnet" : "mainnet"}
+        >
           <WalletProvider autoConnect>
             <App />
           </WalletProvider>

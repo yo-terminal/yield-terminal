@@ -3,6 +3,7 @@ import { useCurrentAccount, useCurrentWallet } from "@mysten/dapp-kit";
 import { Layout } from "./layout/Layout";
 import { Pools } from "../pools/Pools";
 import { Portfolio } from "../portfolio/Portfolio";
+import { Balance } from "../balance/Balance";
 import { ConnectWallet } from "../connectWallet/ConnectWallet";
 import { Dialogs } from "../dialogs/Dialogs";
 
@@ -42,6 +43,7 @@ export function Router() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Pools />} />
           <Route path="portfolio" element={<Portfolio />} />
+          <Route path="balance" element={<Balance />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>

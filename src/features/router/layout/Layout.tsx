@@ -22,6 +22,7 @@ import {
   // HomeIcon,
   AtSymbolIcon,
   BriefcaseIcon,
+  ScaleIcon,
   // Cog6ToothIcon,
 } from "@heroicons/react/20/solid";
 import Logo from "./Logo";
@@ -81,6 +82,15 @@ export function Layout() {
               >
                 <BriefcaseIcon />
                 <SidebarLabel>Portfolio</SidebarLabel>
+              </SidebarItem>
+              <SidebarItem
+                current={pathname === "/balance"}
+                onClick={() => {
+                  navigate("/balance");
+                }}
+              >
+                <ScaleIcon />
+                <SidebarLabel>Balance</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
 
