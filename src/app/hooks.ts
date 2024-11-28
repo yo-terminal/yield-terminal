@@ -83,26 +83,6 @@ export function useSignAndExecute() {
   };
 }
 
-export function useSignAndExecute2() {
-  const packageId = useNetworkVariable("packageId");
-  const queueId = useNetworkVariable("queueId");
-  const suiClient = useSuiClient();
-  const {
-    mutate: signAndExecute,
-    isPending,
-    error,
-  } = useSignAndExecuteTransaction();
-
-  return {
-    packageId,
-    queueId,
-    signAndExecute,
-    isPending,
-    error,
-    suiClient,
-  };
-}
-
 export function usePoolAccounts() {
   const {
     objects: accounts,

@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { PoolDto, OwnerPoolParams, AccountMetaDto } from "./dto";
 
-const DEV = import.meta.env.DEV;
+// const DEV = import.meta.env.DEV;
 
-const apiUrl = DEV ? "http://localhost:3402" : "http://localhost:3402";
+// const apiUrl = DEV ? "http://localhost:3402" : "https://yield.terminal.mobi:3402";
+const apiUrl = "https://yield.terminal.mobi:3402";
 
 export const api = createApi({
   reducerPath: "api",

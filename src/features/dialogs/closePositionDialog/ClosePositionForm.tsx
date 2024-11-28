@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { OpenParams } from "./closePositionDialogSlice";
 import { Button, Spin } from "@trade-project/ui-toolkit";
 import { Transaction } from "@mysten/sui/transactions";
@@ -11,8 +12,9 @@ type Props = OpenParams & {
 export function ClosePositionForm({ poolId, onClose }: Props) {
   const { packageId, queueId, signAndExecute, isPending } = useSignAndExecute();
   const [queueProcess, { isLoading }] = useQueueProcessMutation();
+  const [isWaiting, setWaiting] = useState(false);
 
-  const isProcessing = isPending || isLoading;
+  const isProcessing = isPending || isLoading || isWaiting;
 
   const handleClosePosition = () => {
     const tx = new Transaction();
@@ -21,7 +23,7 @@ export function ClosePositionForm({ poolId, onClose }: Props) {
       arguments: [
         tx.object(queueId),
         tx.pure.u64(2),
-        tx.pure.option("string", JSON.stringify({ poolId })),
+        tx.pure.string(JSON.stringify({ poolId })),
       ],
       target: `${packageId}::yield_terminal::push_action`,
     });
@@ -31,9 +33,13 @@ export function ClosePositionForm({ poolId, onClose }: Props) {
       {
         onSuccess: (result) => {
           console.log("Transaction result:", result);
-          queueProcess().then(() => {
-            onClose();
-          });
+          setWaiting(true);
+          setTimeout(() => {
+            setWaiting(false);
+            queueProcess().then(() => {
+              onClose();
+            });
+          }, 1000);
         },
         onError: () => {
           alert("Something went wrong");
