@@ -28,6 +28,8 @@ export function Manage({pool}: Props) {
                   coinType: pool.quote_type,
                   decimals: pool.quote_decimals,
                   symbol: pool.quote_symbol,
+                  url: pool.quote_url,
+                  min_deposit: pool.min_deposit,
                 })
               );
             }}

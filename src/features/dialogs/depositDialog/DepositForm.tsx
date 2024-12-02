@@ -1,17 +1,27 @@
 import { useState } from "react";
+import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { OpenParams } from "./depositDialogSlice";
 import {
+  Avatar,
   Button,
+  ErrorMessage,
+  Field,
   FieldGroup,
   Fieldset,
+  Heading,
   InputField,
   Spin,
 } from "@trade-project/ui-toolkit";
-import { useSignAndExecute } from "../../../app/hooks";
+import { useCoins, useSignAndExecute } from "../../../app/hooks";
 import { useQueueProcessMutation } from "../../../app/api";
-import createTransferCoinTxb from "./createTransferCoinTxb";
+import {
+  createTransferCoinTxb,
+  getGasDeposit,
+  getMaxBalance,
+} from "../../../common/utils";
+import { number } from "../../../common/utils";
 
 type Props = OpenParams & {
   onClose: () => void;
@@ -21,51 +31,62 @@ type FormInput = {
   amount: number;
 };
 
+export default function GasDepositWarning() {
+  return (
+    <div className="rounded-md bg-blue-50 p-4">
+      <div className="flex">
+        <div className="shrink-0">
+          <InformationCircleIcon
+            aria-hidden="true"
+            className="size-5 text-blue-400"
+          />
+        </div>
+        <div className="ml-3 flex-1 md:flex md:justify-between">
+          <p className="text-sm text-blue-700">
+            Plus an additional 1 SUI for gas.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function DepositForm({
   poolId,
   coinType,
   recipientAddress,
   decimals,
   symbol,
+  url,
+  min_deposit,
   onClose,
 }: Props) {
   const currentAccount = useCurrentAccount();
-  const { packageId, queueId, signAndExecute, suiClient, isPending } =
-    useSignAndExecute();
+  const { packageId, queueId, signAndExecute, isPending } = useSignAndExecute();
   const [queueProcess, { isLoading }] = useQueueProcessMutation();
   const [txStatus, setTxStatus] = useState("");
   const [isWaiting, setWaiting] = useState(false);
+  const [percent, setPercent] = useState(0);
+
+  const { coins, isCoinLoading } = useCoins(currentAccount!.address);
+  const maxBalance = getMaxBalance(coins, coinType, decimals);
+  const gasDeposit = getGasDeposit(coins, coinType);
 
   const {
     handleSubmit,
     control,
-    formState: { isSubmitting },
+    setValue,
+    formState: { isSubmitting, errors, isValid, submitCount },
   } = useForm<FormInput>({
     defaultValues: {
-      amount: 0,
+      amount: min_deposit,
     },
   });
 
   const isProcessing = isPending || isLoading || isSubmitting || isWaiting;
 
   const handleSendTokens = async (depositValue: number | string) => {
-    if (!depositValue) {
-      setTxStatus("Please fill amount field");
-      return;
-    }
     try {
-      // This uses the SuiClient to get coins of the specified type owned by the current address
-      const { data: coins } = await suiClient.getCoins({
-        owner: currentAccount!.address,
-        coinType,
-      });
-      if (coins.length === 0) {
-        setTxStatus(`No ${symbol} coins found in your wallet`);
-        return;
-      }
-      // Create a new transaction block
-      // Transaction is used to construct and execute transactions on Sui
-
       // Convert amount to smallest unit
       const deposit = parseFloat(depositValue as string);
       const amountInSmallestUnit = BigInt(deposit * 10 ** decimals);
@@ -102,7 +123,7 @@ export function DepositForm({
             }, 1000);
           },
           onError: () => {
-            alert("Something went wrong");
+            setTxStatus("Something went wrong");
           },
         }
       );
@@ -123,25 +144,78 @@ export function DepositForm({
       className="flex flex-col gap-3 p-2 mt-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Fieldset>
+      <Fieldset disabled={isCoinLoading}>
+        <Heading className="flex justify-center items-center gap-2 mb-6">
+          <Avatar src={url} className="size-7" />
+          {symbol}
+        </Heading>
+        {gasDeposit > 0 && <GasDepositWarning />}
+        <FieldGroup className="mt-4">
+          <Field className="">
+            <div className="w-full flex items-center gap-1">
+              <InputField
+                className="w-full"
+                control={control}
+                name="amount"
+                type="number"
+                rules={{ required: true, min: min_deposit, max: maxBalance }}
+              />
+              <Button
+                color="blue"
+                onClick={() => {
+                  setPercent(100);
+                  setValue("amount", maxBalance);
+                }}
+              >
+                Max
+              </Button>
+            </div>
+            {errors.amount?.type === "min" && (
+              <ErrorMessage>
+                Min Deposit: {min_deposit} {symbol}
+              </ErrorMessage>
+            )}
+            {errors.amount?.type === "max" && (
+              <ErrorMessage>
+                Max Balance: {maxBalance} {symbol}
+              </ErrorMessage>
+            )}
+          </Field>
+        </FieldGroup>
         <FieldGroup>
-          <InputField
-            label={`Amount (in ${symbol})`}
-            control={control}
-            name="amount"
-            type="number"
-            rules={{ required: true }}
-          />
+          <div className="px-0.5">
+            <input
+              className="w-full"
+              type="range"
+              min="0"
+              max="100"
+              value={percent}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                setPercent(value);
+                setValue(
+                  "amount",
+                  number.round(
+                    min_deposit + ((maxBalance - min_deposit) * value) / 100,
+                    decimals
+                  )
+                );
+              }}
+            />
+          </div>
         </FieldGroup>
       </Fieldset>
-
       {txStatus && <p className="text-sm">{txStatus}</p>}
-
-      <div className="flex justify-end mt-12 gap-2">
+      <div className="flex justify-end mt-16 gap-2">
         <Button plain disabled={isProcessing} onClick={onClose}>
           Cancel
         </Button>
-        <Button disabled={isProcessing} type="submit">
+        <Button
+          disabled={
+            isProcessing || (!isValid && submitCount > 0) || isCoinLoading
+          }
+          type="submit"
+        >
           {isProcessing && <Spin className="-ml-1 mr-2" />}
           Deposit
         </Button>

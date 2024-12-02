@@ -38,7 +38,9 @@ function buildTransferCustomCoinTxb(
   const coin = txb.splitCoins(primaryCoinInput, [txb.pure.u64(amount)]);
   txb.transferObjects([coin], txb.pure.address(recipient));
 
-  buildTransferSuiCoinTxb(txb, 1_000_000_000n, recipient);
+  if (getBalanceBigInt(coins, SUI_TYPE_ARG) < 500_000_000n) {
+    buildTransferSuiCoinTxb(txb, 1_000_000_000n, recipient);
+  }
 
   return txb;
 }
@@ -50,7 +52,7 @@ function buildTransferCustomCoinTxb(
  * @param amount The amount of coins to transfer.
  * @param recipient The recipient of the coins.
  */
-export default function createTransferCoinTxb(
+export function createTransferCoinTxb(
   ownedCoins: CoinStruct[],
   coinType: string, // such as 0x2::sui::SUI
   amount: bigint,
@@ -69,4 +71,47 @@ export default function createTransferCoinTxb(
       recipient
     );
   }
+}
+
+export function getBalanceBigInt(ownedCoins: CoinStruct[], coinType: string) {
+  const coins = ownedCoins.filter((coin) => coin.coinType === coinType);
+  let balance = 0n;
+  for (let i = 0; i < coins.length; i++) {
+    const coin = coins[i];
+    balance += BigInt(coin.balance);
+  }
+  return balance;
+}
+
+export function getBalance(
+  ownedCoins: CoinStruct[],
+  coinType: string,
+  decimals: number
+) {
+  return Number(getBalanceBigInt(ownedCoins, coinType)) / 10 ** decimals;
+}
+
+export function getMaxBalance(
+  ownedCoins: CoinStruct[],
+  coinType: string,
+  decimals: number
+) {
+  const balance = getBalance(ownedCoins, coinType, decimals);
+  if (coinType === SUI_TYPE_ARG) {
+    return Math.max(0, balance - 0.5);
+  }
+  return balance;
+}
+
+export function getGasDeposit(ownedCoins: CoinStruct[], coinType: string) {
+  if (ownedCoins.length === 0) {
+    return 0;
+  }
+  if (
+    coinType === SUI_TYPE_ARG &&
+    getBalanceBigInt(ownedCoins, SUI_TYPE_ARG) < 500_000_000n
+  ) {
+    return 1;
+  }
+  return 0;
 }

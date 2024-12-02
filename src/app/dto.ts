@@ -28,6 +28,9 @@ export type PoolDto = {
   status: PoolStatus;
   position: PositionDto | null;
   profit_30d: number;
+  quote_round: number;
+  min_deposit: number;
+  tvl: number;
 };
 
 export type AccountMetaDto = {

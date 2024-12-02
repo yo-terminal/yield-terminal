@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 import {
@@ -10,6 +10,7 @@ import {
 import type { RootState, AppDispatch } from "./store";
 import { useNetworkVariable } from "./networkConfig";
 import { PoolAccountModel } from "./model";
+import { CoinStruct } from "@mysten/sui/client";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -95,4 +96,24 @@ export function usePoolAccounts() {
     accountMap[x.poolId] = x;
   });
   return { accounts, accountMap, isPending, error, refetch };
+}
+
+export function useCoins(owner: string) {
+  const [coins, setCoins] = useState<CoinStruct[]>([]);
+  const [isCoinLoading, setIsCoinLoading] = useState(false);
+  const suiClient = useSuiClient();
+
+  useEffect(() => {
+    setIsCoinLoading(true);
+    suiClient
+      .getAllCoins({ owner })
+      .then(({ data }) => {
+        setCoins(data);
+      })
+      .finally(() => {
+        setIsCoinLoading(false);
+      });
+  }, [owner, suiClient]);
+
+  return { coins, isCoinLoading };
 }
