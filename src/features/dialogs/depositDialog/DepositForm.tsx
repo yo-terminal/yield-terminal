@@ -12,6 +12,7 @@ import {
   Fieldset,
   Heading,
   InputField,
+  Spin,
 } from "@trade-project/ui-toolkit";
 import { useCoins, useSignAndExecute } from "../../../app/hooks";
 import { useQueueProcessMutation } from "../../../app/api";
@@ -21,7 +22,6 @@ import {
   getMaxBalance,
 } from "../../../common/utils";
 import { number } from "../../../common/utils";
-import { Spin } from "../../../common/components";
 
 type Props = OpenParams & {
   onClose: () => void;

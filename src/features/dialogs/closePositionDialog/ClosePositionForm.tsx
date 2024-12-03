@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { OpenParams } from "./closePositionDialogSlice";
-import { Button, Text, Strong } from "@trade-project/ui-toolkit";
+import { Button, Text, Strong, Spin } from "@trade-project/ui-toolkit";
 import { Transaction } from "@mysten/sui/transactions";
 import { useSignAndExecute } from "../../../app/hooks";
 import { useQueueProcessMutation } from "../../../app/api";
-import { Spin } from "../../../common/components";
 
 type Props = OpenParams & {
   onClose: () => void;

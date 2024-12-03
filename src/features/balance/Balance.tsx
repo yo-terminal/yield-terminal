@@ -5,11 +5,11 @@ import {
   initialUntil,
   LimitLineChart,
   LineChartDto,
+  SpinContainer,
   Subheading,
 } from "@trade-project/ui-toolkit";
 import { Radio, RadioGroup } from "@headlessui/react";
 import { useCurrentAccount } from "@mysten/dapp-kit";
-import { SpinContainer } from "../../common/components";
 
 const defaultData: LineChartDto = {
   name: "",
@@ -54,9 +54,9 @@ export function Balance() {
                 !isFetching
                   ? "cursor-pointer focus:outline-none"
                   : "cursor-not-allowed opacity-80",
-                "flex items-center justify-center rounded-md bg-white px-2.5 py-2 text-sm font-semibold uppercase text-slate-900 ring-1 ring-slate-300 hover:bg-slate-50",
+                "flex items-center justify-center rounded-md bg-white px-2 py-1.5 text-sm font-semibold uppercase text-slate-900 ring-1 ring-slate-300 hover:bg-slate-50",
                 "data-[checked]:bg-slate-900 data-[checked]:text-white data-[checked]:ring-0 data-[focus]:data-[checked]:ring-2 data-[focus]:ring-2 data-[focus]:ring-slate-600 data-[focus]:ring-offset-2 data-[checked]:hover:bg-slate-800 [&:not([data-focus],[data-checked])]:ring-inset",
-                "dark:bg-slate-900 dark:text-white dark:ring-slate-700 dark:hover:bg-slate-950 dark:data-[checked]:bg-blue-600",
+                "dark:bg-slate-900 dark:text-white dark:ring-slate-700 dark:hover:bg-slate-950 dark:data-[checked]:bg-blue-600 dark:data-[checked]:hover:bg-blue-700",
               )}
             >
               {option.name}
@@ -64,7 +64,7 @@ export function Balance() {
           ))}
         </RadioGroup>
       </div>
-      <SpinContainer className="mt-4" spinning={isFetching} dark>
+      <SpinContainer className="mt-4" spinning={isFetching}>
         <LimitLineChart
           data={data}
           disabled={isFetching}

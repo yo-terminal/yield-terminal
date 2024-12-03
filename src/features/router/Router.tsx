@@ -6,7 +6,7 @@ import { Portfolio } from "../portfolio/Portfolio";
 import { Balance } from "../balance/Balance";
 import { ConnectWallet } from "../connectWallet/ConnectWallet";
 import { Dialogs } from "../dialogs/Dialogs";
-import { Spin } from "../../common/components";
+import { Spin } from "@trade-project/ui-toolkit";
 
 export function Router() {
   const currentWallet = useCurrentWallet();

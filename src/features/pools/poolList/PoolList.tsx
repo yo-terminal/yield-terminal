@@ -1,6 +1,9 @@
 import {
   Avatar,
   Badge,
+  BalanceValue,
+  ProfitValue,
+  SpinContainer,
   Subheading,
   Table,
   TableBody,
@@ -12,11 +15,6 @@ import {
 import { usePoolsQuery } from "../../../app/api";
 import { PortfolioCell } from "./portfolioCell/PortfolioCell";
 import { EMPTY_OWNER } from "../../../app/constants";
-import {
-  BalanceValue,
-  ProfitValue,
-  SpinContainer,
-} from "../../../common/components";
 
 type Props = {
   className?: string;
