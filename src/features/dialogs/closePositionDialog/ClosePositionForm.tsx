@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { OpenParams } from "./closePositionDialogSlice";
-import { Button, Spin, Text, Strong } from "@trade-project/ui-toolkit";
+import { Button, Text, Strong } from "@trade-project/ui-toolkit";
 import { Transaction } from "@mysten/sui/transactions";
 import { useSignAndExecute } from "../../../app/hooks";
 import { useQueueProcessMutation } from "../../../app/api";
+import { Spin } from "../../../common/components";
 
 type Props = OpenParams & {
   onClose: () => void;
@@ -59,7 +60,7 @@ export function ClosePositionForm({ poolId, balance, symbol, onClose }: Props) {
           Cancel
         </Button>
         <Button disabled={isProcessing} onClick={handleClosePosition}>
-          {isProcessing && <Spin className="-ml-1 mr-2" />}
+          {isProcessing && <Spin dark className="-ml-1 mr-2" />}
           Close Position
         </Button>
       </div>

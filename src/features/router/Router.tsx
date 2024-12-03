@@ -6,18 +6,24 @@ import { Portfolio } from "../portfolio/Portfolio";
 import { Balance } from "../balance/Balance";
 import { ConnectWallet } from "../connectWallet/ConnectWallet";
 import { Dialogs } from "../dialogs/Dialogs";
+import { Spin } from "../../common/components";
 
 export function Router() {
   const currentWallet = useCurrentWallet();
   const currentAccount = useCurrentAccount();
 
   if (currentWallet.isConnecting) {
+    const spinPanel = (
+      <div className="h-96 flex justify-center items-center">
+        <Spin />
+      </div>
+    );
     return (
       <>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<div />} />
-            <Route path="*" element={<div />} />
+            <Route index element={spinPanel} />
+            <Route path="*" element={spinPanel} />
           </Route>
         </Routes>
       </>
@@ -32,7 +38,7 @@ export function Router() {
             <Route index element={<Pools />} />
             <Route path="portfolio" element={<ConnectWallet />} />
             <Route path="balance" element={<ConnectWallet />} />
-            <Route path="*" element={<NoMatch />} />
+            <Route path="*" element={<ConnectWallet />} />
           </Route>
         </Routes>
         <Dialogs />

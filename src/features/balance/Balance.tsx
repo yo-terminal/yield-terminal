@@ -9,6 +9,7 @@ import {
 } from "@trade-project/ui-toolkit";
 import { Radio, RadioGroup } from "@headlessui/react";
 import { useCurrentAccount } from "@mysten/dapp-kit";
+import { SpinContainer } from "../../common/components";
 
 const defaultData: LineChartDto = {
   name: "",
@@ -52,8 +53,10 @@ export function Balance() {
               className={clsx(
                 !isFetching
                   ? "cursor-pointer focus:outline-none"
-                  : "cursor-not-allowed opacity-50",
-                "flex items-center justify-center rounded-md bg-white px-2.5 py-2 text-sm font-semibold uppercase text-slate-900 ring-1 ring-slate-300 hover:bg-slate-50 data-[checked]:bg-slate-900 data-[checked]:text-white data-[checked]:ring-0 data-[focus]:data-[checked]:ring-2 data-[focus]:ring-2 data-[focus]:ring-slate-600 data-[focus]:ring-offset-2 data-[checked]:hover:bg-slate-800 sm:flex-1 [&:not([data-focus],[data-checked])]:ring-inset dark:bg-slate-900 dark:text-white dark:ring-slate-700 dark:hover:bg-slate-950 dark:data-[checked]:bg-blue-600"
+                  : "cursor-not-allowed opacity-80",
+                "flex items-center justify-center rounded-md bg-white px-2.5 py-2 text-sm font-semibold uppercase text-slate-900 ring-1 ring-slate-300 hover:bg-slate-50",
+                "data-[checked]:bg-slate-900 data-[checked]:text-white data-[checked]:ring-0 data-[focus]:data-[checked]:ring-2 data-[focus]:ring-2 data-[focus]:ring-slate-600 data-[focus]:ring-offset-2 data-[checked]:hover:bg-slate-800 [&:not([data-focus],[data-checked])]:ring-inset",
+                "dark:bg-slate-900 dark:text-white dark:ring-slate-700 dark:hover:bg-slate-950 dark:data-[checked]:bg-blue-600",
               )}
             >
               {option.name}
@@ -61,12 +64,13 @@ export function Balance() {
           ))}
         </RadioGroup>
       </div>
-      <LimitLineChart
-        className="mt-4"
-        data={data}
-        disabled={isFetching}
-        onChangeUntil={setUntil}
-      />
+      <SpinContainer className="mt-4" spinning={isFetching} dark>
+        <LimitLineChart
+          data={data}
+          disabled={isFetching}
+          onChangeUntil={setUntil}
+        />
+      </SpinContainer>
     </>
   );
 }
