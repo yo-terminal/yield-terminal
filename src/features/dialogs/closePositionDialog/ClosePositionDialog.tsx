@@ -19,7 +19,7 @@ export function ClosePositionDialog() {
   };
 
   return (
-    <Modal title="Close Position" size="xl" open={open} onClose={closeDialog}>
+    <Modal title="Close Position" size="md" open={open} onClose={closeDialog}>
       <ClosePositionForm {...openParams} onClose={closeDialog} />
     </Modal>
   );

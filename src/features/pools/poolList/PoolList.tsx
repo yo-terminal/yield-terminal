@@ -67,7 +67,7 @@ export function PoolList({ owner }: Props) {
                 {owner !== EMPTY_OWNER ? (
                   <PortfolioCell pool={pool} owner={owner} />
                 ) : (
-                  <Badge color="slate">Wallet Disconnected</Badge>
+                  <Badge color="slate" title="Wallet is not connected">Disconnected</Badge>
                 )}
               </TableCell>
             </TableRow>

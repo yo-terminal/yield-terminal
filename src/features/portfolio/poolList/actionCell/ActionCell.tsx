@@ -49,6 +49,8 @@ export function ActionCell({ pool }: Props) {
               dispatch(
                 openClosePositionDialog({
                   poolId: pool._id,
+                  balance: pool.position!.balance,
+                  symbol: pool.quote_symbol,
                 })
               );
             }}

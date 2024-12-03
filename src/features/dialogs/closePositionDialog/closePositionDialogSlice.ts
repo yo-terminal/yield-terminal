@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type OpenParams = {
   poolId: number;
+  balance: number;
+  symbol: string;
 };
 
 type State = {
