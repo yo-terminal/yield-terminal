@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Subheading,
   Table,
   TableBody,
@@ -9,8 +10,8 @@ import {
   TableRow,
 } from "@trade-project/ui-toolkit";
 import { usePoolsQuery } from "../../../app/api";
-import { usePoolAccounts } from "../../../app/hooks";
 import { PortfolioCell } from "./portfolioCell/PortfolioCell";
+import { EMPTY_OWNER } from "../../../app/constants";
 
 type Props = {
   className?: string;
@@ -19,7 +20,6 @@ type Props = {
 
 export function PoolList({ owner }: Props) {
   const { data = [] } = usePoolsQuery({ owner });
-  const { accountMap, isPending } = usePoolAccounts();
 
   return (
     <>
@@ -53,7 +53,9 @@ export function PoolList({ owner }: Props) {
                 </div>
               </TableCell>
               <TableCell>{pool.profit_30d}%</TableCell>
-              <TableCell>{pool.tvl} {pool.quote_symbol}</TableCell>
+              <TableCell>
+                {pool.tvl} {pool.quote_symbol}
+              </TableCell>
 
               {/* <TableCell>
                 <div className="flex items-center gap-2">
@@ -62,12 +64,10 @@ export function PoolList({ owner }: Props) {
                 </div>
               </TableCell> */}
               <TableCell className="text-right">
-                {!isPending && (
-                  <PortfolioCell
-                    pool={pool}
-                    owner={owner}
-                    poolAccount={accountMap[pool._id]}
-                  />
+                {owner !== EMPTY_OWNER ? (
+                  <PortfolioCell pool={pool} owner={owner} />
+                ) : (
+                  <Badge color="slate">Wallet Disconnected</Badge>
                 )}
               </TableCell>
             </TableRow>

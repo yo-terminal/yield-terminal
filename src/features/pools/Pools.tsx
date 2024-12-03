@@ -1,6 +1,7 @@
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { PoolList } from "./poolList/PoolList";
 import { Badge, Divider } from "@trade-project/ui-toolkit";
+import { EMPTY_OWNER } from "../../app/constants";
 
 export function Stat({
   title,
@@ -47,7 +48,7 @@ export function Pools() {
         <Stat title="Tickets sold" value="5,888" change="+4.5%" />
         <Stat title="Pageviews" value="823,067" change="+21.2%" />
       </div> */}
-      {account && <PoolList className="mt-8" owner={account.address} />}
+      <PoolList className="mt-8" owner={account?.address || EMPTY_OWNER} />
     </>
   );
 }

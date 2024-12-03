@@ -1,6 +1,6 @@
 import {
   Avatar,
-  Badge,
+  // Badge,
   Subheading,
   Table,
   TableBody,
@@ -34,7 +34,7 @@ export function PoolList({ owner }: Props) {
         <TableHead>
           <TableRow>
             {/* <TableHeader>Pool number</TableHeader> */}
-            <TableHeader>Status</TableHeader>
+            {/* <TableHeader>Status</TableHeader> */}
             <TableHeader>Name</TableHeader>
             <TableHeader>Profit</TableHeader>
             <TableHeader>Balance</TableHeader>
@@ -48,11 +48,11 @@ export function PoolList({ owner }: Props) {
             <TableRow key={pool._id} title={`Pool #${pool._id}`}>
               {/* <TableCell>{pool._id}</TableCell> */}
               {/* <TableCell className="text-slate-500">{pool.name}</TableCell> */}
-              <TableCell>
+              {/* <TableCell>
                 <Badge color={pool.status === "Active" ? "lime" : "slate"}>
                   {pool.status}
                 </Badge>
-              </TableCell>
+              </TableCell> */}
               <TableCell>
                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
@@ -65,10 +65,10 @@ export function PoolList({ owner }: Props) {
                 </div>
               </TableCell>
               <TableCell>
-                {pool.position ? `${pool.position.profit}%` : "-"}
+                {`${pool.position!.profit}%`}
               </TableCell>
               <TableCell>
-                {pool.position ? pool.position.balance : "-"}
+                {pool.position!.balance} {pool.quote_symbol}
               </TableCell>
 
               {/* <TableCell>

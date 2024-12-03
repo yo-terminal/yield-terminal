@@ -1,5 +1,5 @@
 import { PoolDto } from "../../../../app/dto";
-import { PoolAccountModel } from "../../../../app/model";
+import { usePoolAccounts } from "../../../../app/hooks";
 import { isPortfolio } from "../../../../common/utils";
 import { Activate } from "./activate/Activate";
 import { Manage } from "./manage/Manage";
@@ -7,10 +7,14 @@ import { Manage } from "./manage/Manage";
 type Props = {
   owner: string;
   pool: PoolDto;
-  poolAccount: PoolAccountModel | undefined;
 };
 
-export function PortfolioCell({ pool, owner, poolAccount }: Props) {
+export function PortfolioCell({ pool, owner }: Props) {
+  const { accountMap, isPending } = usePoolAccounts();
+  if (isPending) {
+    return null;
+  }
+  const poolAccount = accountMap[pool._id];
   return isPortfolio(pool, poolAccount) ? (
     <Manage pool={pool} />
   ) : (

@@ -29,10 +29,13 @@ export function Router() {
       <>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<ConnectWallet />} />
-            <Route path="*" element={<ConnectWallet />} />
+            <Route index element={<Pools />} />
+            <Route path="portfolio" element={<ConnectWallet />} />
+            <Route path="balance" element={<ConnectWallet />} />
+            <Route path="*" element={<NoMatch />} />
           </Route>
         </Routes>
+        <Dialogs />
       </>
     );
   }
