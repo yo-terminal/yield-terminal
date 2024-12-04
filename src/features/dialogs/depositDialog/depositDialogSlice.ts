@@ -6,8 +6,8 @@ export type OpenParams = {
   recipientAddress: string;
   decimals: number;
   symbol: string;
-  url: string;
   min_deposit: number;
+  reserve: number;
 };
 
 type State = {

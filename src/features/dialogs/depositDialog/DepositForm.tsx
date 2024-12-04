@@ -18,7 +18,6 @@ import { useCoins, useSignAndExecute } from "../../../app/hooks";
 import { useQueueProcessMutation } from "../../../app/api";
 import {
   createTransferCoinTxb,
-  getGasDeposit,
   getMaxBalance,
 } from "../../../common/utils";
 import { number } from "../../../common/utils";
@@ -57,8 +56,8 @@ export function DepositForm({
   recipientAddress,
   decimals,
   symbol,
-  url,
   min_deposit,
+  reserve,
   onClose,
 }: Props) {
   const currentAccount = useCurrentAccount();
@@ -70,7 +69,6 @@ export function DepositForm({
 
   const { coins, isCoinLoading } = useCoins(currentAccount!.address);
   const maxBalance = getMaxBalance(coins, coinType, decimals);
-  const gasDeposit = getGasDeposit(coins, coinType);
 
   const {
     handleSubmit,
@@ -95,7 +93,8 @@ export function DepositForm({
         coins,
         coinType,
         amountInSmallestUnit,
-        recipientAddress
+        recipientAddress,
+        reserve
       );
 
       tx.moveCall({
@@ -144,12 +143,11 @@ export function DepositForm({
       className="flex flex-col gap-3 p-2 mt-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Fieldset disabled={isCoinLoading}>
+      <Fieldset className="mb-8" disabled={isCoinLoading}>
         <Heading className="flex justify-center items-center gap-2 mb-6">
-          <Avatar src={url} className="size-7" />
+          <Avatar src={`/coins/${symbol}.png`} className="size-7" />
           {symbol}
         </Heading>
-        {gasDeposit > 0 && <GasDepositWarning />}
         <FieldGroup className="mt-4">
           <Field className="">
             <div className="w-full flex items-center gap-1">
@@ -164,7 +162,7 @@ export function DepositForm({
                 color="blue"
                 onClick={() => {
                   setPercent(100);
-                  setValue("amount", maxBalance);
+                  setValue("amount", maxBalance, { shouldValidate: true });
                 }}
               >
                 Max
@@ -198,15 +196,17 @@ export function DepositForm({
                   number.round(
                     min_deposit + ((maxBalance - min_deposit) * value) / 100,
                     decimals
-                  )
+                  ),
+                  { shouldValidate: true }
                 );
               }}
             />
           </div>
         </FieldGroup>
       </Fieldset>
+      {reserve < 0.5 && <GasDepositWarning />}
       {txStatus && <p className="text-sm">{txStatus}</p>}
-      <div className="flex justify-end mt-16 gap-2">
+      <div className="flex justify-end mt-8 gap-2">
         <Button plain disabled={isProcessing} onClick={onClose}>
           Cancel
         </Button>

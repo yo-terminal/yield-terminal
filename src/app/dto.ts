@@ -1,5 +1,3 @@
-export type PoolStatus = 'Active' | 'Inactive';
-
 export type OwnerPoolParams = {
   owner: string;
   pool_id: number;
@@ -15,17 +13,15 @@ export type PositionDto = {
   profitValue: number;
   deposit: number;
   balance: number;
+  reserve: number;
 };
 
 export type PoolDto = {
   _id: number;
-  quote_url: string;
-  asset_url: string;
   quote_symbol: string;
   asset_symbol: string;
   quote_type: string;
   quote_decimals: number;
-  status: PoolStatus;
   position: PositionDto | null;
   profit_30d: number;
   quote_round: number;

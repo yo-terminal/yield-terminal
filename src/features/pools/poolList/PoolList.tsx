@@ -48,8 +48,14 @@ export function PoolList({ owner }: Props) {
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <div className="flex -space-x-2">
-                      <Avatar src={pool.asset_url} className="size-6" />
-                      <Avatar src={pool.quote_url} className="size-6" />
+                      <Avatar
+                        src={`/coins/${pool.asset_symbol}.png`}
+                        className="size-6"
+                      />
+                      <Avatar
+                        src={`/coins/${pool.quote_symbol}.png`}
+                        className="size-6"
+                      />
                     </div>
                     <span>
                       {pool.asset_symbol} - {pool.quote_symbol}

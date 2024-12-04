@@ -19,7 +19,8 @@ function buildTransferCustomCoinTxb(
   coins: CoinStruct[],
   coinType: string,
   amount: bigint,
-  recipient: string
+  recipient: string,
+  reserve: number
 ) {
   // split the primary coin and merge the rest
   const [primaryCoin, ...mergeCoins] = coins.filter(
@@ -38,7 +39,7 @@ function buildTransferCustomCoinTxb(
   const coin = txb.splitCoins(primaryCoinInput, [txb.pure.u64(amount)]);
   txb.transferObjects([coin], txb.pure.address(recipient));
 
-  if (getBalanceBigInt(coins, SUI_TYPE_ARG) < 500_000_000n) {
+  if (reserve < 0.5) {
     buildTransferSuiCoinTxb(txb, 1_000_000_000n, recipient);
   }
 
@@ -56,7 +57,8 @@ export function createTransferCoinTxb(
   ownedCoins: CoinStruct[],
   coinType: string, // such as 0x2::sui::SUI
   amount: bigint,
-  recipient: string
+  recipient: string,
+  reserve: number
 ) {
   const txb = new Transaction();
 
@@ -68,7 +70,8 @@ export function createTransferCoinTxb(
       ownedCoins,
       coinType,
       amount,
-      recipient
+      recipient,
+      reserve
     );
   }
 }
