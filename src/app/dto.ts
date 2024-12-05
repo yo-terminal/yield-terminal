@@ -18,6 +18,7 @@ export type PositionDto = {
 
 export type PoolDto = {
   _id: number;
+  protocol: string;
   quote_symbol: string;
   asset_symbol: string;
   quote_type: string;

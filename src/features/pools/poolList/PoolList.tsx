@@ -15,6 +15,7 @@ import {
 import { usePoolsQuery } from "../../../app/api";
 import { PortfolioCell } from "./portfolioCell/PortfolioCell";
 import { EMPTY_OWNER } from "../../../app/constants";
+import { PoolName } from "../../../common/components";
 
 type Props = {
   className?: string;
@@ -31,36 +32,27 @@ export function PoolList({ owner }: Props) {
         <Table className="[--gutter:theme(spacing.6)] lg:[--gutter:theme(spacing.10)]">
           <TableHead>
             <TableRow>
-              {/* <TableHeader>Pool number</TableHeader> */}
               <TableHeader>Name</TableHeader>
+              <TableHeader>Protocol</TableHeader>
               <TableHeader>Profit (30d)</TableHeader>
               <TableHeader>TVL</TableHeader>
-
-              {/* <TableHeader>Asset</TableHeader> */}
               <TableHeader className="text-right">Portfolio</TableHeader>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((pool) => (
-              <TableRow key={pool._id} title={`Order #${pool._id}`}>
-                {/* <TableCell>{pool._id}</TableCell> */}
-                {/* <TableCell className="text-slate-500">{pool.name}</TableCell> */}
+              <TableRow key={pool._id} title={`Pool #${pool._id}`}>
                 <TableCell>
-                  <div className="flex items-center gap-2">
-                    <div className="flex -space-x-2">
-                      <Avatar
-                        src={`/coins/${pool.asset_symbol}.png`}
-                        className="size-6"
-                      />
-                      <Avatar
-                        src={`/coins/${pool.quote_symbol}.png`}
-                        className="size-6"
-                      />
-                    </div>
-                    <span>
-                      {pool.asset_symbol} - {pool.quote_symbol}
-                    </span>
-                  </div>
+                  <PoolName
+                    asset={pool.asset_symbol}
+                    quote={pool.quote_symbol}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Avatar
+                    src={`/protocols/${pool.protocol}.png`}
+                    className="size-6"
+                  />
                 </TableCell>
                 <TableCell>
                   <ProfitValue value={pool.profit_30d} color percent />
@@ -68,13 +60,6 @@ export function PoolList({ owner }: Props) {
                 <TableCell>
                   <BalanceValue value={pool.tvl} symbol={pool.quote_symbol} />
                 </TableCell>
-
-                {/* <TableCell>
-                <div className="flex items-center gap-2">
-                  <Avatar src={pool.asset_url} className="size-6" />
-                  <span>{pool.asset_symbol}</span>
-                </div>
-              </TableCell> */}
                 <TableCell className="text-right">
                   {owner !== EMPTY_OWNER ? (
                     <PortfolioCell pool={pool} owner={owner} />

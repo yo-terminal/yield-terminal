@@ -1,5 +1,5 @@
 import { ConnectButton } from "@mysten/dapp-kit";
-// import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useLocation, Outlet, useNavigate } from "react-router-dom";
 import {
   Sidebar,
@@ -11,15 +11,17 @@ import {
   SidebarSection,
   SidebarSpacer,
   SidebarLayout,
-  // Dropdown,
-  // DropdownButton,
-  // DropdownDivider,
-  // DropdownItem,
-  // DropdownLabel,
-  // DropdownMenu,
+  Dropdown,
+  DropdownButton,
+  DropdownDivider,
+  DropdownItem,
+  DropdownLabel,
+  DropdownMenu,
 } from "@trade-project/ui-toolkit";
 import {
-  // HomeIcon,
+  HomeIcon,
+  LockClosedIcon,
+  CommandLineIcon,
   AtSymbolIcon,
   BriefcaseIcon,
   ScaleIcon,
@@ -36,14 +38,14 @@ export function Layout() {
       sidebar={
         <Sidebar>
           <SidebarHeader>
-            <SidebarItem href="/">
+            {/* <SidebarItem href="/">
               <Logo />
               <SidebarLabel className="pl-2">Terminal</SidebarLabel>
-            </SidebarItem>
-            {/* <Dropdown>
+            </SidebarItem> */}
+            <Dropdown>
               <DropdownButton as={SidebarItem}>
                 <Logo />
-                <SidebarLabel>Yield Terminal</SidebarLabel>
+                <SidebarLabel>Terminal</SidebarLabel>
                 <ChevronDownIcon />
               </DropdownButton>
               <DropdownMenu
@@ -51,8 +53,12 @@ export function Layout() {
                 anchor="bottom start"
               >
                 <DropdownItem href="/">
-                  <Logo />
-                  <DropdownLabel className="pl-3">Yield Terminal</DropdownLabel>
+                  <CommandLineIcon />
+                  <DropdownLabel>Terminal</DropdownLabel>
+                </DropdownItem>
+                <DropdownItem href="https://keystore.terminal.mobi">
+                  <LockClosedIcon />
+                  <DropdownLabel>Keystore</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
                 <DropdownItem href="https://terminal.mobi">
@@ -60,7 +66,7 @@ export function Layout() {
                   <DropdownLabel>Home</DropdownLabel>
                 </DropdownItem>
               </DropdownMenu>
-            </Dropdown> */}
+            </Dropdown>
           </SidebarHeader>
 
           <SidebarBody>

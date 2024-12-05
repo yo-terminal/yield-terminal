@@ -1,5 +1,5 @@
 import {
-  Avatar,
+  // Avatar,
   BalanceValue,
   ProfitValue,
   SpinContainer,
@@ -16,6 +16,8 @@ import { usePoolsQuery } from "../../../app/api";
 import { ActionCell } from "./actionCell/ActionCell";
 import { usePoolAccounts } from "../../../app/hooks";
 import { isPortfolio } from "../../../common/utils";
+import { PoolName } from "../../../common/components";
+import { Empty } from "./empty/Empty";
 
 type Props = {
   className?: string;
@@ -23,7 +25,7 @@ type Props = {
 };
 
 export function PoolList({ owner }: Props) {
-  const { data = [], isFetching } = usePoolsQuery({ owner });
+  const { data = [], isFetching, isLoading } = usePoolsQuery({ owner });
   const { accountMap } = usePoolAccounts();
 
   const portfolioPools = data.filter((pool) =>
@@ -37,52 +39,35 @@ export function PoolList({ owner }: Props) {
         <Table className="[--gutter:theme(spacing.6)] lg:[--gutter:theme(spacing.10)]">
           <TableHead>
             <TableRow>
-              {/* <TableHeader>Pool number</TableHeader> */}
               {/* <TableHeader>Status</TableHeader> */}
               <TableHeader>Name</TableHeader>
+              {/* <TableHeader>Protocol</TableHeader> */}
               <TableHeader>Profit</TableHeader>
               <TableHeader>Balance</TableHeader>
-
-              {/* <TableHeader>Asset</TableHeader> */}
+              {/* <TableHeader>Address</TableHeader> */}
               <TableHeader className="text-right">Action</TableHeader>
             </TableRow>
           </TableHead>
           <TableBody>
             {portfolioPools.map((pool) => (
               <TableRow key={pool._id} title={`Pool #${pool._id}`}>
-                {/* <TableCell>{pool._id}</TableCell> */}
-                {/* <TableCell className="text-slate-500">{pool.name}</TableCell> */}
                 {/* <TableCell>
                 <Badge color={pool.status === "Active" ? "lime" : "slate"}>
                   {pool.status}
                 </Badge>
               </TableCell> */}
                 <TableCell>
-                  <div className="flex items-center gap-2">
-                    <div className="flex -space-x-2">
-                      <Avatar
-                        src={`/coins/${pool.asset_symbol}.png`}
-                        className="size-6"
-                      />
-                      <Avatar
-                        src={`/coins/${pool.quote_symbol}.png`}
-                        className="size-6"
-                      />
-                    </div>
-                    <span>
-                      {pool.asset_symbol} - {pool.quote_symbol}
-                    </span>
-                  </div>
+                  <PoolName
+                    asset={pool.asset_symbol}
+                    quote={pool.quote_symbol}
+                  />
                 </TableCell>
                 {/* <TableCell>
-                <ProfitValue value={pool.position!.profit} color percent /> (
-                <BalanceValue
-                  value={pool.position!.profitValue}
-                  symbol={pool.quote_symbol}
-                  profit
-                />
-                )
-              </TableCell> */}
+                  <Avatar
+                    src={`/protocols/${pool.protocol}.png`}
+                    className="size-6"
+                  />
+                </TableCell> */}
                 <TableCell>
                   <BalanceValue
                     value={pool.position!.profitValue}
@@ -97,13 +82,9 @@ export function PoolList({ owner }: Props) {
                     symbol={pool.quote_symbol}
                   />
                 </TableCell>
-
                 {/* <TableCell>
-                <div className="flex items-center gap-2">
-                  <Avatar src={pool.asset_url} className="size-6" />
-                  <span>{pool.asset_symbol}</span>
-                </div>
-              </TableCell> */}
+                  <AddressView address={pool.position!.address} />
+                </TableCell> */}
                 <TableCell className="text-right">
                   <ActionCell pool={pool} />
                 </TableCell>
@@ -111,6 +92,7 @@ export function PoolList({ owner }: Props) {
             ))}
           </TableBody>
         </Table>
+        {portfolioPools.length === 0 && !isLoading && <Empty />}
       </SpinContainer>
     </>
   );
