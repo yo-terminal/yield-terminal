@@ -46,12 +46,13 @@ export function PoolList({ owner }: Props) {
                   <PoolName
                     asset={pool.asset_symbol}
                     quote={pool.quote_symbol}
+                    fee={pool.fee}
                   />
                 </TableCell>
                 <TableCell>
                   <Avatar
                     src={`/protocols/${pool.protocol}.png`}
-                    className="size-6"
+                    className="size-6 opacity-80"
                   />
                 </TableCell>
                 <TableCell>

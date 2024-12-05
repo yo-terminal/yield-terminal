@@ -1,22 +1,26 @@
 import clsx from "clsx";
-import { Avatar } from "@trade-project/ui-toolkit";
+import { Avatar, Text } from "@trade-project/ui-toolkit";
 
 type Props = {
   className?: string;
   asset: string;
   quote: string;
+  fee: number;
 };
 
-export function PoolName({ className, asset, quote }: Props) {
+export function PoolName({ className, asset, quote, fee }: Props) {
   return (
     <div className={clsx("flex items-center gap-2", className)}>
       <div className="flex -space-x-2">
         <Avatar src={`/coins/${asset}.png`} className="size-6" />
         <Avatar src={`/coins/${quote}.png`} className="size-6" />
       </div>
-      <span>
-        {asset} - {quote}
-      </span>
+      <div className="flex items-center gap-1">
+        <span>
+          {asset} - {quote}
+        </span>
+        <Text>({fee}%)</Text>
+      </div>
     </div>
   );
 }

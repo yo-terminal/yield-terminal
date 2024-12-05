@@ -23,6 +23,7 @@ export type PoolDto = {
   asset_symbol: string;
   quote_type: string;
   quote_decimals: number;
+  fee: number;
   position: PositionDto | null;
   profit_30d: number;
   quote_round: number;
