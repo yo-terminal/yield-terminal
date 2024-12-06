@@ -1,6 +1,7 @@
 import {
   // Avatar,
   BalanceValue,
+  ProfitBadge,
   SpinContainer,
   // Badge,
   Subheading,
@@ -16,7 +17,7 @@ import { usePoolsQuery } from "../../../app/api";
 import { ActionCell } from "./actionCell/ActionCell";
 import { usePoolAccounts } from "../../../app/hooks";
 import { isPortfolio } from "../../../common/utils";
-import { PoolName, ProfitBadge } from "../../../common/components";
+import { PoolName } from "../../../common/components";
 import { Empty } from "./empty/Empty";
 import { DateTime } from "luxon";
 

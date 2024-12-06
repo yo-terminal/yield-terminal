@@ -1,7 +1,7 @@
 import { CoinStruct } from "@mysten/sui/client";
 import { Transaction } from "@mysten/sui/transactions";
 
-const SUI_TYPE_ARG = "0x2::sui::SUI";
+export const SUI_TYPE_ARG = "0x2::sui::SUI";
 
 function buildTransferSuiCoinTxb(
   txb: Transaction,

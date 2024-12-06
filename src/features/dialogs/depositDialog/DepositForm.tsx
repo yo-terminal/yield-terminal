@@ -15,7 +15,7 @@ import {
 } from "@trade-project/ui-toolkit";
 import { useCoins, useSignAndExecute } from "../../../app/hooks";
 import { useQueueProcessMutation } from "../../../app/api";
-import { createTransferCoinTxb, getMaxBalance } from "../../../common/utils";
+import { createTransferCoinTxb, getMaxBalance, SUI_TYPE_ARG } from "../../../common/utils";
 import { DepositInput } from "../../../common/components";
 
 type Props = OpenParams & {
@@ -148,7 +148,7 @@ export function DepositForm({
           <Avatar src={`/coins/${symbol}.png`} className="size-7" />
           {symbol}
         </Heading>
-        {reserve < 0.5 && <GasDepositWarning />}
+        {coinType !== SUI_TYPE_ARG && reserve < 0.5 && <GasDepositWarning />}
         <FieldGroup className="mt-4">
           <Field className="">
             <DepositInput

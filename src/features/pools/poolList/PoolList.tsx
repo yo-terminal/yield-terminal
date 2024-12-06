@@ -2,6 +2,7 @@ import {
   Avatar,
   Badge,
   BalanceValue,
+  ProfitBadge,
   SpinContainer,
   Subheading,
   Table,
@@ -14,7 +15,7 @@ import {
 import { usePoolsQuery } from "../../../app/api";
 import { PortfolioCell } from "./portfolioCell/PortfolioCell";
 import { EMPTY_OWNER } from "../../../app/constants";
-import { PoolName, ProfitBadge } from "../../../common/components";
+import { PoolName } from "../../../common/components";
 
 type Props = {
   className?: string;

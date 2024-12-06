@@ -10,10 +10,10 @@ import {
   RadioGroup,
   RadioField,
   Label,
+  LimitLineChart,
 } from "@trade-project/ui-toolkit";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { Empty } from "./empty/Empty";
-import { LimitLineChart } from "../../common/components/limit-line-chart";
 
 const defaultData: LineChartDto = {
   name: "",
