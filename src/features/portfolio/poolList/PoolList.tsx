@@ -1,7 +1,6 @@
 import {
   // Avatar,
   BalanceValue,
-  ProfitValue,
   SpinContainer,
   // Badge,
   Subheading,
@@ -11,13 +10,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  Text,
 } from "@trade-project/ui-toolkit";
 import { usePoolsQuery } from "../../../app/api";
 import { ActionCell } from "./actionCell/ActionCell";
 import { usePoolAccounts } from "../../../app/hooks";
 import { isPortfolio } from "../../../common/utils";
-import { PoolName } from "../../../common/components";
+import { PoolName, ProfitBadge } from "../../../common/components";
 import { Empty } from "./empty/Empty";
+import { DateTime } from "luxon";
 
 type Props = {
   className?: string;
@@ -41,6 +42,7 @@ export function PoolList({ owner }: Props) {
             <TableRow>
               {/* <TableHeader>Status</TableHeader> */}
               <TableHeader>Name</TableHeader>
+              <TableHeader>Open</TableHeader>
               {/* <TableHeader>Protocol</TableHeader> */}
               <TableHeader>Profit</TableHeader>
               <TableHeader>Balance</TableHeader>
@@ -63,6 +65,13 @@ export function PoolList({ owner }: Props) {
                     fee={pool.fee}
                   />
                 </TableCell>
+                <TableCell>
+                  <Text>
+                    {DateTime.fromMillis(pool.position!.time).toFormat(
+                      "dd LLL yyyy"
+                    )}
+                  </Text>
+                </TableCell>
                 {/* <TableCell>
                   <Avatar
                     src={`/protocols/${pool.protocol}.png`}
@@ -70,12 +79,13 @@ export function PoolList({ owner }: Props) {
                   />
                 </TableCell> */}
                 <TableCell>
+                  <ProfitBadge value={pool.position!.profit} percent /> (
                   <BalanceValue
                     value={pool.position!.profitValue}
                     symbol={pool.quote_symbol}
                     profit
-                  />{" "}
-                  (<ProfitValue value={pool.position!.profit} color percent />)
+                  />
+                  )
                 </TableCell>
                 <TableCell>
                   <BalanceValue

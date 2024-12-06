@@ -43,6 +43,12 @@ export const api = createApi({
         url: "/balance",
       }),
     }),
+    profit: builder.query<LineChartDto, { index: number; until: number; owner: string }>({
+      query: (params) => ({
+        params,
+        url: "/profit",
+      }),
+    }),
   }),
 });
 
@@ -51,4 +57,5 @@ export const {
   useActivatePoolMutation,
   useQueueProcessMutation,
   useBalanceQuery,
+  useProfitQuery,
 } = api;

@@ -2,7 +2,6 @@ import {
   Avatar,
   Badge,
   BalanceValue,
-  ProfitValue,
   SpinContainer,
   Subheading,
   Table,
@@ -15,7 +14,7 @@ import {
 import { usePoolsQuery } from "../../../app/api";
 import { PortfolioCell } from "./portfolioCell/PortfolioCell";
 import { EMPTY_OWNER } from "../../../app/constants";
-import { PoolName } from "../../../common/components";
+import { PoolName, ProfitBadge } from "../../../common/components";
 
 type Props = {
   className?: string;
@@ -34,7 +33,7 @@ export function PoolList({ owner }: Props) {
             <TableRow>
               <TableHeader>Name</TableHeader>
               <TableHeader>Protocol</TableHeader>
-              <TableHeader>Profit (30d)</TableHeader>
+              <TableHeader>Avg Profit (30d)</TableHeader>
               <TableHeader>TVL</TableHeader>
               <TableHeader className="text-right">Portfolio</TableHeader>
             </TableRow>
@@ -52,11 +51,11 @@ export function PoolList({ owner }: Props) {
                 <TableCell>
                   <Avatar
                     src={`/protocols/${pool.protocol}.png`}
-                    className="size-6 opacity-80"
+                    className="size-6 saturate-50"
                   />
                 </TableCell>
                 <TableCell>
-                  <ProfitValue value={pool.profit_30d} color percent />
+                  <ProfitBadge value={pool.profit_30d} percent />
                 </TableCell>
                 <TableCell>
                   <BalanceValue value={pool.tvl} symbol={pool.quote_symbol} />

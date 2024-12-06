@@ -14,6 +14,7 @@ export type PositionDto = {
   deposit: number;
   balance: number;
   reserve: number;
+  time: number;
 };
 
 export type PoolDto = {

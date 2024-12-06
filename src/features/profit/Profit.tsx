@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { useBalanceQuery } from "../../app/api";
+import { useProfitQuery } from "../../app/api";
 import {
   initialUntil,
   LineChartDto,
@@ -28,7 +28,7 @@ const quoteOptions = [
 
 const initialOption = quoteOptions[0];
 
-export function Balance() {
+export function Profit() {
   const account = useCurrentAccount();
   const [quote, setQuote] = useState(initialOption);
   const [until, setUntil] = useState(initialUntil);
@@ -36,14 +36,14 @@ export function Balance() {
     data = defaultData,
     isFetching,
     isLoading,
-  } = useBalanceQuery(
+  } = useProfitQuery(
     { index: quote.value, until, owner: account?.address || "" },
     { skip: !account }
   );
 
   return (
     <>
-      <Subheading>Balance</Subheading>
+      <Subheading>Profit</Subheading>
       <div className="flex justify-end">
         <div className="flex items-start justify-center py-2 px-4 overflow-hidden border-slate-200 rounded-lg border dark:border-white/10">
           <RadioGroup

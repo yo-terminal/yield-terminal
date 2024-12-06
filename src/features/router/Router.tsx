@@ -4,6 +4,7 @@ import { Layout } from "./layout/Layout";
 import { Pools } from "../pools/Pools";
 import { Portfolio } from "../portfolio/Portfolio";
 import { Balance } from "../balance/Balance";
+import { Profit } from "../profit/Profit";
 import { ConnectWallet } from "../connectWallet/ConnectWallet";
 import { Dialogs } from "../dialogs/Dialogs";
 import { Spin } from "@trade-project/ui-toolkit";
@@ -36,8 +37,9 @@ export function Router() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Pools />} />
-            <Route path="portfolio" element={<ConnectWallet />} />
+            {/* <Route path="portfolio" element={<ConnectWallet />} />
             <Route path="balance" element={<ConnectWallet />} />
+            <Route path="profit" element={<ConnectWallet />} /> */}
             <Route path="*" element={<ConnectWallet />} />
           </Route>
         </Routes>
@@ -53,6 +55,7 @@ export function Router() {
           <Route index element={<Pools />} />
           <Route path="portfolio" element={<Portfolio />} />
           <Route path="balance" element={<Balance />} />
+          <Route path="profit" element={<Profit />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>
