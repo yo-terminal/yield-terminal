@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, useController } from "react-hook-form";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { OpenParams } from "./depositDialogSlice";
 import {
@@ -11,16 +11,12 @@ import {
   FieldGroup,
   Fieldset,
   Heading,
-  InputField,
   Spin,
 } from "@trade-project/ui-toolkit";
 import { useCoins, useSignAndExecute } from "../../../app/hooks";
 import { useQueueProcessMutation } from "../../../app/api";
-import {
-  createTransferCoinTxb,
-  getMaxBalance,
-} from "../../../common/utils";
-import { number } from "../../../common/utils";
+import { createTransferCoinTxb, getMaxBalance } from "../../../common/utils";
+import { DepositInput } from "../../../common/components";
 
 type Props = OpenParams & {
   onClose: () => void;
@@ -65,7 +61,6 @@ export function DepositForm({
   const [queueProcess, { isLoading }] = useQueueProcessMutation();
   const [txStatus, setTxStatus] = useState("");
   const [isWaiting, setWaiting] = useState(false);
-  const [percent, setPercent] = useState(0);
 
   const { coins, isCoinLoading } = useCoins(currentAccount!.address);
   const maxBalance = getMaxBalance(coins, coinType, decimals);
@@ -73,12 +68,17 @@ export function DepositForm({
   const {
     handleSubmit,
     control,
-    setValue,
     formState: { isSubmitting, errors, isValid, submitCount },
   } = useForm<FormInput>({
     defaultValues: {
       amount: min_deposit,
     },
+  });
+
+  const { field } = useController({
+    name: "amount",
+    control,
+    rules: { required: true, min: min_deposit, max: maxBalance },
   });
 
   const isProcessing = isPending || isLoading || isSubmitting || isWaiting;
@@ -148,65 +148,38 @@ export function DepositForm({
           <Avatar src={`/coins/${symbol}.png`} className="size-7" />
           {symbol}
         </Heading>
+        {reserve < 0.5 && <GasDepositWarning />}
         <FieldGroup className="mt-4">
           <Field className="">
-            <div className="w-full flex items-center gap-1">
-              <InputField
-                className="w-full"
-                control={control}
-                name="amount"
-                type="number"
-                rules={{ required: true, min: min_deposit, max: maxBalance }}
-              />
-              <Button
-                color="blue"
-                onClick={() => {
-                  setPercent(100);
-                  setValue("amount", maxBalance, { shouldValidate: true });
-                }}
-              >
-                Max
-              </Button>
+            <DepositInput
+              value={field.value}
+              onChange={(val) => {
+                field.onChange(val);
+                setTxStatus("");
+              }}
+              minDeposit={min_deposit}
+              maxBalance={maxBalance}
+              decimals={decimals}
+              ref={field.ref}
+              onBlur={field.onBlur}
+            />
+            <div className="min-h-6 mt-2 mx-1">
+              {errors.amount?.type === "min" && (
+                <ErrorMessage>
+                  Min Deposit: {min_deposit} {symbol}
+                </ErrorMessage>
+              )}
+              {errors.amount?.type === "max" && (
+                <ErrorMessage>
+                  Max Balance: {maxBalance} {symbol}
+                </ErrorMessage>
+              )}
+              {txStatus && <ErrorMessage>{txStatus}</ErrorMessage>}
             </div>
-            {errors.amount?.type === "min" && (
-              <ErrorMessage>
-                Min Deposit: {min_deposit} {symbol}
-              </ErrorMessage>
-            )}
-            {errors.amount?.type === "max" && (
-              <ErrorMessage>
-                Max Balance: {maxBalance} {symbol}
-              </ErrorMessage>
-            )}
           </Field>
         </FieldGroup>
-        <FieldGroup>
-          <div className="px-0.5">
-            <input
-              className="w-full"
-              type="range"
-              min="0"
-              max="100"
-              value={percent}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setPercent(value);
-                setValue(
-                  "amount",
-                  number.round(
-                    min_deposit + ((maxBalance - min_deposit) * value) / 100,
-                    decimals
-                  ),
-                  { shouldValidate: true }
-                );
-              }}
-            />
-          </div>
-        </FieldGroup>
       </Fieldset>
-      {reserve < 0.5 && <GasDepositWarning />}
-      {txStatus && <p className="text-sm">{txStatus}</p>}
-      <div className="flex justify-end mt-8 gap-2">
+      <div className="flex justify-end gap-2">
         <Button plain disabled={isProcessing} onClick={onClose}>
           Cancel
         </Button>
