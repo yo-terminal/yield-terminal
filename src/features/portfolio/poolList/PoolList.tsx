@@ -1,3 +1,4 @@
+import { Duration } from "luxon";
 import {
   // Avatar,
   BalanceValue,
@@ -19,7 +20,6 @@ import { usePoolAccounts } from "../../../app/hooks";
 import { isPortfolio } from "../../../common/utils";
 import { PoolName } from "../../../common/components";
 import { Empty } from "./empty/Empty";
-import { DateTime } from "luxon";
 
 type Props = {
   className?: string;
@@ -64,14 +64,15 @@ export function PoolList({ owner }: Props) {
                     asset={pool.asset_symbol}
                     quote={pool.quote_symbol}
                     fee={pool.fee}
-                    address={pool.address}
+                    asset_type={pool.asset_type}
                   />
                 </TableCell>
                 <TableCell>
                   <Text>
-                    {DateTime.fromMillis(pool.position!.time).toFormat(
-                      "dd LLL yyyy"
-                    )}
+                    {Duration.fromMillis(Date.now() - pool.position!.time)
+                      .shiftTo("days")
+                      .toHuman({ maximumFractionDigits: 0 })}{" "}
+                    ago
                   </Text>
                 </TableCell>
                 {/* <TableCell>

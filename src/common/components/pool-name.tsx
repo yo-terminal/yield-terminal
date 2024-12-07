@@ -6,10 +6,10 @@ type Props = {
   asset: string;
   quote: string;
   fee: number;
-  address: string;
+  asset_type: string;
 };
 
-export function PoolName({ className, asset, quote, fee, address }: Props) {
+export function PoolName({ className, asset, quote, fee, asset_type }: Props) {
   return (
     <div className={clsx("flex items-center gap-2", className)}>
       <div className="flex -space-x-2">
@@ -18,7 +18,7 @@ export function PoolName({ className, asset, quote, fee, address }: Props) {
       </div>
       <div className="flex items-center gap-1">
         <a
-          href={`https://www.geckoterminal.com/sui-network/pools/${address}`}
+          href={`https://www.birdeye.so/token/${asset_type}?chain=sui`}
           target="_blank"
         >
           {asset} - {quote}
