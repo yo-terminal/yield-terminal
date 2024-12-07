@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { useForm, SubmitHandler, useController } from "react-hook-form";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { OpenParams } from "./depositDialogSlice";
@@ -15,8 +14,14 @@ import {
 } from "@trade-project/ui-toolkit";
 import { useCoins, useSignAndExecute } from "../../../app/hooks";
 import { useQueueProcessMutation } from "../../../app/api";
-import { createTransferCoinTxb, getMaxBalance, SUI_TYPE_ARG } from "../../../common/utils";
+import {
+  createTransferCoinTxb,
+  getMaxBalance,
+  SUI_TYPE_ARG,
+} from "../../../common/utils";
 import { DepositInput } from "../../../common/components";
+import { GasDepositWarning } from "./warnings/GasDepositWarning";
+import { NotEnoughWarning } from "./warnings/NotEnoughWarning";
 
 type Props = OpenParams & {
   onClose: () => void;
@@ -25,26 +30,6 @@ type Props = OpenParams & {
 type FormInput = {
   amount: number;
 };
-
-export default function GasDepositWarning() {
-  return (
-    <div className="rounded-md bg-blue-50 p-4">
-      <div className="flex">
-        <div className="shrink-0">
-          <InformationCircleIcon
-            aria-hidden="true"
-            className="size-5 text-blue-400"
-          />
-        </div>
-        <div className="ml-3 flex-1 md:flex md:justify-between">
-          <p className="text-sm text-blue-700">
-            Plus an additional 1 SUI for gas.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export function DepositForm({
   poolId,
@@ -82,6 +67,7 @@ export function DepositForm({
   });
 
   const isProcessing = isPending || isLoading || isSubmitting || isWaiting;
+  const notEnough = min_deposit > maxBalance;
 
   const handleSendTokens = async (depositValue: number | string) => {
     try {
@@ -143,12 +129,21 @@ export function DepositForm({
       className="flex flex-col gap-3 p-2 mt-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Fieldset className="mb-8" disabled={isCoinLoading}>
+      <Fieldset className="mb-8" disabled={isCoinLoading || notEnough}>
         <Heading className="flex justify-center items-center gap-2 mb-6">
           <Avatar src={`/coins/${symbol}.png`} className="size-7" />
           {symbol}
         </Heading>
-        {coinType !== SUI_TYPE_ARG && reserve < 0.5 && <GasDepositWarning />}
+        {!notEnough && coinType !== SUI_TYPE_ARG && reserve < 0.5 && (
+          <GasDepositWarning />
+        )}
+        {!isCoinLoading && notEnough && (
+          <NotEnoughWarning
+            balance={maxBalance}
+            minDeposit={min_deposit}
+            symbol={symbol}
+          />
+        )}
         <FieldGroup className="mt-4">
           <Field className="">
             <DepositInput
@@ -185,7 +180,10 @@ export function DepositForm({
         </Button>
         <Button
           disabled={
-            isProcessing || (!isValid && submitCount > 0) || isCoinLoading
+            isProcessing ||
+            (!isValid && submitCount > 0) ||
+            isCoinLoading ||
+            notEnough
           }
           type="submit"
         >

@@ -100,7 +100,7 @@ export function usePoolAccounts() {
 
 export function useCoins(owner: string) {
   const [coins, setCoins] = useState<CoinStruct[]>([]);
-  const [isCoinLoading, setIsCoinLoading] = useState(false);
+  const [isCoinLoading, setIsCoinLoading] = useState(true);
   const suiClient = useSuiClient();
 
   useEffect(() => {
