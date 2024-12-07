@@ -6,9 +6,10 @@ type Props = {
   asset: string;
   quote: string;
   fee: number;
+  address: string;
 };
 
-export function PoolName({ className, asset, quote, fee }: Props) {
+export function PoolName({ className, asset, quote, fee, address }: Props) {
   return (
     <div className={clsx("flex items-center gap-2", className)}>
       <div className="flex -space-x-2">
@@ -16,9 +17,12 @@ export function PoolName({ className, asset, quote, fee }: Props) {
         <Avatar src={`/coins/${quote}.png`} className="size-6 z-10" />
       </div>
       <div className="flex items-center gap-1">
-        <span>
+        <a
+          href={`https://www.geckoterminal.com/sui-network/pools/${address}`}
+          target="_blank"
+        >
           {asset} - {quote}
-        </span>
+        </a>
         <Text>({fee}%)</Text>
       </div>
     </div>

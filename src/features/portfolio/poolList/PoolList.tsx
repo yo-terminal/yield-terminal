@@ -64,6 +64,7 @@ export function PoolList({ owner }: Props) {
                     asset={pool.asset_symbol}
                     quote={pool.quote_symbol}
                     fee={pool.fee}
+                    address={pool.address}
                   />
                 </TableCell>
                 <TableCell>

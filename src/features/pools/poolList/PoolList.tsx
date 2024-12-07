@@ -47,13 +47,19 @@ export function PoolList({ owner }: Props) {
                     asset={pool.asset_symbol}
                     quote={pool.quote_symbol}
                     fee={pool.fee}
+                    address={pool.address}
                   />
                 </TableCell>
                 <TableCell>
-                  <Avatar
-                    src={`/protocols/${pool.protocol}.png`}
-                    className="size-6 saturate-50"
-                  />
+                  <a
+                    href={`https://app.cetus.zone/liquidity/analytics?poolAddress=${pool.address}`}
+                    target="_blank"
+                  >
+                    <Avatar
+                      src={`/protocols/${pool.protocol}.png`}
+                      className="size-6 saturate-50"
+                    />
+                  </a>
                 </TableCell>
                 <TableCell>
                   <ProfitBadge value={pool.profit_30d} percent />
