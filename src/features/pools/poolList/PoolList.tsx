@@ -56,7 +56,7 @@ export function PoolList({ owner }: Props) {
                     target="_blank"
                   >
                     <Avatar
-                      src={`/protocols/${pool.protocol}.png`}
+                      src={`https://assets.terminal.mobi/protocols/${pool.protocol}.png`}
                       className="size-6 saturate-50"
                     />
                   </a>
