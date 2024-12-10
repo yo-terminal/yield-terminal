@@ -75,7 +75,7 @@ export function DepositForm({
       const deposit = parseFloat(depositValue as string);
       const amountInSmallestUnit = BigInt(deposit * 10 ** decimals);
 
-      const tx = createTransferCoinTxb(
+      const { tx, gasDeposit } = createTransferCoinTxb(
         coins,
         coinType,
         amountInSmallestUnit,
@@ -87,7 +87,7 @@ export function DepositForm({
         arguments: [
           tx.object(queueId),
           tx.pure.u64(1),
-          tx.pure.string(JSON.stringify({ poolId, deposit })),
+          tx.pure.string(JSON.stringify({ poolId, deposit, gasDeposit })),
         ],
         target: `${packageId}::yield_terminal::push_action`,
       });
@@ -131,7 +131,10 @@ export function DepositForm({
     >
       <Fieldset className="mb-8" disabled={isCoinLoading || notEnough}>
         <Heading className="flex justify-center items-center gap-2 mb-6">
-          <Avatar src={`/coins/${symbol}.png`} className="size-7" />
+          <Avatar
+            src={`https://assets.terminal.mobi/coins/${symbol}.png`}
+            className="size-7"
+          />
           {symbol}
         </Heading>
         {!notEnough && coinType !== SUI_TYPE_ARG && reserve < 0.5 && (

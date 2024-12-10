@@ -4,18 +4,18 @@ import { Transaction } from "@mysten/sui/transactions";
 export const SUI_TYPE_ARG = "0x2::sui::SUI";
 
 function buildTransferSuiCoinTxb(
-  txb: Transaction,
+  tx: Transaction,
   amount: bigint,
   recipient: string
 ) {
   // split the coin to be sent from the gas coins
-  const coin = txb.splitCoins(txb.gas, [txb.pure.u64(amount)]);
-  txb.transferObjects([coin], txb.pure.address(recipient));
-  return txb;
+  const coin = tx.splitCoins(tx.gas, [tx.pure.u64(amount)]);
+  tx.transferObjects([coin], tx.pure.address(recipient));
+  return { tx, gasDeposit: 0 };
 }
 
 function buildTransferCustomCoinTxb(
-  txb: Transaction,
+  tx: Transaction,
   coins: CoinStruct[],
   coinType: string,
   amount: bigint,
@@ -27,23 +27,25 @@ function buildTransferCustomCoinTxb(
     (coin) => coin.coinType === coinType
   );
   // TODO: pass the object instead of the id
-  const primaryCoinInput = txb.object(primaryCoin.coinObjectId);
+  const primaryCoinInput = tx.object(primaryCoin.coinObjectId);
   if (mergeCoins.length) {
     // TODO: This could just merge a subset of coins that meet the balance requirements instead of all of them.
-    txb.mergeCoins(
+    tx.mergeCoins(
       primaryCoinInput,
-      mergeCoins.map((coin) => txb.object(coin.coinObjectId))
+      mergeCoins.map((coin) => tx.object(coin.coinObjectId))
     );
   }
   // TODO: pass gas coin object instead of pure amount, which can avoid unnecessary network calls
-  const coin = txb.splitCoins(primaryCoinInput, [txb.pure.u64(amount)]);
-  txb.transferObjects([coin], txb.pure.address(recipient));
+  const coin = tx.splitCoins(primaryCoinInput, [tx.pure.u64(amount)]);
+  tx.transferObjects([coin], tx.pure.address(recipient));
 
+  let gasDeposit = 0;
   if (reserve < 0.5) {
-    buildTransferSuiCoinTxb(txb, 1_000_000_000n, recipient);
+    buildTransferSuiCoinTxb(tx, 1_000_000_000n, recipient);
+    gasDeposit = 1;
   }
 
-  return txb;
+  return { tx, gasDeposit };
 }
 
 /**
@@ -60,13 +62,13 @@ export function createTransferCoinTxb(
   recipient: string,
   reserve: number
 ) {
-  const txb = new Transaction();
+  const tx = new Transaction();
 
   if (coinType === SUI_TYPE_ARG) {
-    return buildTransferSuiCoinTxb(txb, amount, recipient);
+    return buildTransferSuiCoinTxb(tx, amount, recipient);
   } else {
     return buildTransferCustomCoinTxb(
-      txb,
+      tx,
       ownedCoins,
       coinType,
       amount,
