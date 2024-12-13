@@ -3,7 +3,7 @@ import "@mysten/dapp-kit/dist/index.css";
 import { SuiClientProvider, WalletProvider } from "@mysten/dapp-kit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { createRoot } from "react-dom/client";
 import App from "./app/App";
 import { store } from "./app/store.ts";

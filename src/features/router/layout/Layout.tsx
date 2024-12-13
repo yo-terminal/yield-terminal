@@ -1,6 +1,6 @@
 import { ConnectButton } from "@mysten/dapp-kit";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
-import { useLocation, Outlet, useNavigate } from "react-router-dom";
+import { useLocation, Outlet } from "react-router";
 import {
   Sidebar,
   SidebarBody,
@@ -31,7 +31,6 @@ import {
 import Logo from "./Logo";
 
 export function Layout() {
-  const navigate = useNavigate();
   const { pathname } = useLocation();
 
   return (
@@ -72,39 +71,22 @@ export function Layout() {
 
           <SidebarBody>
             <SidebarSection>
-              <SidebarItem
-                current={pathname === "/"}
-                onClick={() => {
-                  navigate("/");
-                }}
-              >
+              <SidebarItem current={pathname === "/"} href="/">
                 <AtSymbolIcon />
                 <SidebarLabel>Pools</SidebarLabel>
               </SidebarItem>
               <SidebarItem
                 current={pathname === "/portfolio"}
-                onClick={() => {
-                  navigate("/portfolio");
-                }}
+                href="/portfolio"
               >
                 <BriefcaseIcon />
                 <SidebarLabel>Portfolio</SidebarLabel>
               </SidebarItem>
-              <SidebarItem
-                current={pathname === "/balance"}
-                onClick={() => {
-                  navigate("/balance");
-                }}
-              >
+              <SidebarItem current={pathname === "/balance"} href="/balance">
                 <ScaleIcon />
                 <SidebarLabel>Balance</SidebarLabel>
               </SidebarItem>
-              <SidebarItem
-                current={pathname === "/profit"}
-                onClick={() => {
-                  navigate("/profit");
-                }}
-              >
+              <SidebarItem current={pathname === "/profit"} href="/profit">
                 <BanknotesIcon />
                 <SidebarLabel>Profit</SidebarLabel>
               </SidebarItem>

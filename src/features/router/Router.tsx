@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link } from "react-router";
 import { useCurrentAccount, useCurrentWallet } from "@mysten/dapp-kit";
 import { Layout } from "./layout/Layout";
 import { Pools } from "../pools/Pools";

@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import { Button, Text, Subheading } from "@trade-project/ui-toolkit";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export function Empty() {
   const navigate = useNavigate();
