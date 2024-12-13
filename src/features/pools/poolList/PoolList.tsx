@@ -34,7 +34,30 @@ export function PoolList({ owner }: Props) {
             <TableRow>
               <TableHeader>Name</TableHeader>
               <TableHeader>Protocol</TableHeader>
-              <TableHeader>Avg Profit (7d)</TableHeader>
+              <TableHeader>
+                <span
+                  title="Avg Profit"
+                  className="underline decoration-dotted"
+                >
+                  30d
+                </span>
+              </TableHeader>
+              <TableHeader>
+                <span
+                  title="Avg Profit"
+                  className="underline decoration-dotted"
+                >
+                  7d
+                </span>
+              </TableHeader>
+              <TableHeader>
+                <span
+                  title="Avg Profit"
+                  className="underline decoration-dotted"
+                >
+                  24h
+                </span>
+              </TableHeader>
               <TableHeader>TVL</TableHeader>
               <TableHeader className="text-right">Portfolio</TableHeader>
             </TableRow>
@@ -62,7 +85,13 @@ export function PoolList({ owner }: Props) {
                   </a>
                 </TableCell>
                 <TableCell>
+                  <ProfitBadge value={pool.profit_30d} percent />
+                </TableCell>
+                <TableCell>
                   <ProfitBadge value={pool.profit_7d} percent />
+                </TableCell>
+                <TableCell>
+                  <ProfitBadge value={pool.profit_24h} percent />
                 </TableCell>
                 <TableCell>
                   <BalanceValue value={pool.tvl} symbol={pool.quote_symbol} />

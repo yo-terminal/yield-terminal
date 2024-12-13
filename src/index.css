@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    @apply bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-200;
+    @apply text-slate-950 antialiased lg:bg-slate-100 dark:bg-slate-900 dark:text-white dark:lg:bg-slate-950
   }
 
   html,

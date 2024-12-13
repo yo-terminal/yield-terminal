@@ -30,6 +30,7 @@ export type PoolDto = {
   position: PositionDto | null;
   profit_30d: number;
   profit_7d: number;
+  profit_24h: number;
   quote_round: number;
   min_deposit: number;
   tvl: number;

@@ -8,7 +8,11 @@ export default {
     "./node_modules/@trade-project/ui-toolkit/dist/index.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Inter, sans-serif', { fontFeatureSettings: '"cv11"' }],
+      },
+    },
   },
   plugins: [formsPlugin],
 };

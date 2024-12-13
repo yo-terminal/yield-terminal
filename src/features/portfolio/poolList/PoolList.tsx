@@ -1,5 +1,6 @@
 import { Duration } from "luxon";
 import {
+  AddressView,
   // Avatar,
   BalanceValue,
   ProfitBadge,
@@ -47,7 +48,7 @@ export function PoolList({ owner }: Props) {
               {/* <TableHeader>Protocol</TableHeader> */}
               <TableHeader>Profit</TableHeader>
               <TableHeader>Balance</TableHeader>
-              {/* <TableHeader>Address</TableHeader> */}
+              <TableHeader>Address</TableHeader>
               <TableHeader className="text-right">Action</TableHeader>
             </TableRow>
           </TableHead>
@@ -96,9 +97,9 @@ export function PoolList({ owner }: Props) {
                     symbol={pool.quote_symbol}
                   />
                 </TableCell>
-                {/* <TableCell>
+                <TableCell>
                   <AddressView address={pool.position!.address} />
-                </TableCell> */}
+                </TableCell>
                 <TableCell className="text-right">
                   <ActionCell pool={pool} />
                 </TableCell>
