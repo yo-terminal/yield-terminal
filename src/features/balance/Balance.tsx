@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { useState } from "react";
 import { useBalanceQuery } from "../../app/api";
 import {
@@ -6,11 +5,10 @@ import {
   LineChartDto,
   SpinContainer,
   Subheading,
-  Radio,
-  RadioGroup,
-  RadioField,
-  Label,
   LimitLineChart,
+  ToolBar,
+  ToolRadioGroup,
+  ToolRadio,
 } from "@trade-project/ui-toolkit";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { Empty } from "./empty/Empty";
@@ -44,33 +42,18 @@ export function Balance() {
   return (
     <>
       <Subheading>Balance</Subheading>
-      <div className="flex justify-end">
-        <div className="flex items-start justify-center py-2 px-4 overflow-hidden border-slate-200 rounded-lg border dark:border-white/10">
-          <RadioGroup
-            className="flex items-center gap-4"
-            value={quote.name}
-            disabled={isFetching}
-            onChange={(option) => {
-              setQuote(quoteOptions.find((x) => x.name === option)!);
-            }}
-          >
+      <div className="flex justify-end gap-2">
+        <ToolBar>
+          <ToolRadioGroup value={quote} disabled={isFetching} onChange={setQuote}>
             {quoteOptions.map((option) => (
-              <RadioField key={option.name} className="!mt-0 !gap-0">
-                <Radio value={option.name} disabled={isFetching} />
-                <Label
-                  className={clsx(
-                    "pl-2",
-                    isFetching ? "!text-gray-500 !dark:text-gray-600" : ""
-                  )}
-                >
-                  {option.name}
-                </Label>
-              </RadioField>
+              <ToolRadio key={option.name} value={option} disabled={isFetching}>
+                {option.name}
+              </ToolRadio>
             ))}
-          </RadioGroup>
-        </div>
+          </ToolRadioGroup>
+        </ToolBar>
       </div>
-      <SpinContainer className="mt-4" spinning={isFetching}>
+      <SpinContainer className="mt-2" spinning={isFetching}>
         {data.dataset.length === 0 && !isLoading ? (
           <Empty />
         ) : (

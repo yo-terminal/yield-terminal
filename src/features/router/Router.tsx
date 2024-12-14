@@ -55,7 +55,7 @@ export function Router() {
           <Route index element={<Pools />} />
           <Route path="portfolio" element={<Portfolio />} />
           <Route path="balance" element={<Balance />} />
-          <Route path="profit" element={<Profit />} />
+          <Route path="income" element={<Profit />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>

@@ -25,8 +25,8 @@ import {
   AtSymbolIcon,
   BriefcaseIcon,
   ScaleIcon,
-  BanknotesIcon,
   // Cog6ToothIcon,
+  ArrowTrendingUpIcon,
 } from "@heroicons/react/20/solid";
 import Logo from "./Logo";
 
@@ -86,9 +86,9 @@ export function Layout() {
                 <ScaleIcon />
                 <SidebarLabel>Balance</SidebarLabel>
               </SidebarItem>
-              <SidebarItem current={pathname === "/profit"} href="/profit">
-                <BanknotesIcon />
-                <SidebarLabel>Profit</SidebarLabel>
+              <SidebarItem current={pathname === "/income"} href="/income">
+                <ArrowTrendingUpIcon />
+                <SidebarLabel>Income</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
 

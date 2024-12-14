@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { useState } from "react";
 import { useProfitQuery } from "../../app/api";
 import {
@@ -6,12 +5,13 @@ import {
   LineChartDto,
   SpinContainer,
   Subheading,
-  Radio,
-  RadioGroup,
-  RadioField,
-  Label,
   LimitLineChart,
+  ToolBar,
+  ToolRadioGroup,
+  ToolRadio,
+  // ToolButton,
 } from "@trade-project/ui-toolkit";
+// import { ArrowPathIcon } from "@heroicons/react/16/solid";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { Empty } from "./empty/Empty";
 
@@ -36,6 +36,7 @@ export function Profit() {
     data = defaultData,
     isFetching,
     isLoading,
+    // refetch,
   } = useProfitQuery(
     { index: quote.value, until, owner: account?.address || "" },
     { skip: !account }
@@ -43,34 +44,28 @@ export function Profit() {
 
   return (
     <>
-      <Subheading>Profit</Subheading>
-      <div className="flex justify-end">
-        <div className="flex items-start justify-center py-2 px-4 overflow-hidden border-slate-200 rounded-lg border dark:border-white/10">
-          <RadioGroup
-            className="flex items-center gap-4"
-            value={quote.name}
+      <Subheading>Income</Subheading>
+      <div className="flex justify-end gap-2">
+        <ToolBar>
+          <ToolRadioGroup
+            value={quote}
             disabled={isFetching}
-            onChange={(option) => {
-              setQuote(quoteOptions.find((x) => x.name === option)!);
-            }}
+            onChange={setQuote}
           >
             {quoteOptions.map((option) => (
-              <RadioField key={option.name} className="!mt-0 !gap-0">
-                <Radio value={option.name} disabled={isFetching} />
-                <Label
-                  className={clsx(
-                    "pl-2",
-                    isFetching ? "!text-gray-500 !dark:text-gray-600" : ""
-                  )}
-                >
-                  {option.name}
-                </Label>
-              </RadioField>
+              <ToolRadio key={option.name} value={option} disabled={isFetching}>
+                {option.name}
+              </ToolRadio>
             ))}
-          </RadioGroup>
-        </div>
+          </ToolRadioGroup>
+        </ToolBar>
+        {/* <ToolBar>
+          <ToolButton onClick={refetch}>
+            <ArrowPathIcon />
+          </ToolButton>
+        </ToolBar> */}
       </div>
-      <SpinContainer className="mt-4" spinning={isFetching}>
+      <SpinContainer className="mt-2" spinning={isFetching}>
         {data.dataset.length === 0 && !isLoading ? (
           <Empty />
         ) : (
