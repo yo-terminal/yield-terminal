@@ -1,6 +1,9 @@
-export type OwnerPoolParams = {
-  owner: string;
+export type PoolParams = {
   pool_id: number;
+};
+
+export type OwnerPoolParams = PoolParams & {
+  owner: string;
 };
 
 export type PositionDto = {
@@ -40,4 +43,9 @@ export type AccountMetaDto = {
   name: string;
   address: string;
   accessKey: string;
+};
+
+export type PersonalMessageParams = {
+  dataJsonBase64: string;
+  signature: string;
 };

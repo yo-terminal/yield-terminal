@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { PoolDto, OwnerPoolParams, AccountMetaDto } from "./dto";
+import { PoolDto, OwnerPoolParams, AccountMetaDto, PersonalMessageParams } from "./dto";
 import { LineChartDto } from "@trade-project/ui-toolkit";
 
 // const DEV = import.meta.env.DEV;
@@ -49,6 +49,14 @@ export const api = createApi({
         url: "/profit",
       }),
     }),
+    closePosition: builder.mutation<void, PersonalMessageParams>({
+      query: (body) => ({
+        method: "POST",
+        url: "/position/close",
+        body,
+      }),
+      invalidatesTags: ["Pool"],
+    }),
   }),
 });
 
@@ -56,6 +64,7 @@ export const {
   usePoolsQuery,
   useActivatePoolMutation,
   useQueueProcessMutation,
+  useClosePositionMutation,
   useBalanceQuery,
   useProfitQuery,
 } = api;

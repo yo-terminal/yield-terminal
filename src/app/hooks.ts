@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
 import {
   useCurrentAccount,
+  useCurrentWallet,
   useSignAndExecuteTransaction,
   useSuiClient,
   useSuiClientQuery,
@@ -11,6 +12,8 @@ import type { RootState, AppDispatch } from "./store";
 import { useNetworkVariable } from "./networkConfig";
 import { PoolAccountModel } from "./model";
 import { CoinStruct } from "@mysten/sui/client";
+import { useClosePositionMutation } from "./api";
+import { PoolParams } from "./dto";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -116,4 +119,44 @@ export function useCoins(owner: string) {
   }, [owner, suiClient]);
 
   return { coins, isCoinLoading };
+}
+
+export function useClosePosition() {
+  const [isPending, setPending] = useState(false);
+  const account = useCurrentAccount();
+  const wallet = useCurrentWallet();
+  const [close] = useClosePositionMutation();
+
+  const closePosition = async (params: PoolParams) => {
+    if (account && wallet.currentWallet) {
+      setPending(true);
+      const encoder = new TextEncoder();
+      const uint8Array = encoder.encode(
+        JSON.stringify({ ...params, timestamp: Date.now() })
+      );
+      try {
+        const res = await wallet.currentWallet.features[
+          "sui:signPersonalMessage"
+        ]?.signPersonalMessage({
+          account: account,
+          message: uint8Array,
+        });
+        if (res) {
+          await close({
+            dataJsonBase64: res.bytes,
+            signature: res.signature,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setPending(false);
+      }
+    }
+  };
+
+  return {
+    closePosition,
+    isPending,
+  };
 }
