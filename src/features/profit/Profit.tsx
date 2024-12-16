@@ -44,7 +44,7 @@ export function Profit() {
 
   return (
     <>
-      <Subheading>Income</Subheading>
+      <Subheading>Net Profit</Subheading>
       <div className="flex justify-end gap-2">
         <ToolBar>
           <ToolRadioGroup

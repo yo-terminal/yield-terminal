@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { PoolDto, OwnerPoolParams, AccountMetaDto, PersonalMessageParams } from "./dto";
+import { PoolDto, OwnerPoolParams, AccountMetaDto, PersonalMessageParams, OwnerOverviewDto } from "./dto";
 import { LineChartDto } from "@trade-project/ui-toolkit";
 
 // const DEV = import.meta.env.DEV;
@@ -49,6 +49,12 @@ export const api = createApi({
         url: "/profit",
       }),
     }),
+    ownerOverview: builder.query<OwnerOverviewDto, { index: number; owner: string }>({
+      query: (params) => ({
+        params,
+        url: "/overview/owner",
+      }),
+    }),
     closePosition: builder.mutation<void, PersonalMessageParams>({
       query: (body) => ({
         method: "POST",
@@ -67,4 +73,5 @@ export const {
   useClosePositionMutation,
   useBalanceQuery,
   useProfitQuery,
+  useOwnerOverviewQuery,
 } = api;

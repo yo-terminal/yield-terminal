@@ -49,3 +49,10 @@ export type PersonalMessageParams = {
   dataJsonBase64: string;
   signature: string;
 };
+
+export type OwnerOverviewDto = {
+  balance: number;
+  deposit: number;
+  profit: number;
+  profitValue: number;
+};

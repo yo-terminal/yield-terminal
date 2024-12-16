@@ -27,7 +27,7 @@ type Props = {
   owner: string;
 };
 
-export function PoolList({ owner }: Props) {
+export function PoolList({ owner, className }: Props) {
   const { data = [], isFetching, isLoading } = usePoolsQuery({ owner });
   const { accountMap } = usePoolAccounts();
 
@@ -36,8 +36,8 @@ export function PoolList({ owner }: Props) {
   );
 
   return (
-    <>
-      <Subheading>Portfolio</Subheading>
+    <div className={className}>
+      <Subheading>Positions</Subheading>
       <SpinContainer className="mt-4 min-h-40" spinning={isFetching}>
         <Table className="[--gutter:theme(spacing.6)] lg:[--gutter:theme(spacing.10)]">
           <TableHead>
@@ -83,13 +83,12 @@ export function PoolList({ owner }: Props) {
                   />
                 </TableCell> */}
                 <TableCell>
-                  <ProfitBadge value={pool.position!.profit} percent /> (
+                  <ProfitBadge value={pool.position!.profit} percent />{" "}
                   <BalanceValue
                     value={pool.position!.profitValue}
                     symbol={pool.quote_symbol}
                     profit
                   />
-                  )
                 </TableCell>
                 <TableCell>
                   <BalanceValue
@@ -109,6 +108,6 @@ export function PoolList({ owner }: Props) {
         </Table>
         {portfolioPools.length === 0 && !isLoading && <Empty />}
       </SpinContainer>
-    </>
+    </div>
   );
 }

@@ -22,11 +22,11 @@ type Props = {
   owner: string;
 };
 
-export function PoolList({ owner }: Props) {
+export function PoolList({ owner, className }: Props) {
   const { data = [], isFetching } = usePoolsQuery({ owner });
 
   return (
-    <>
+    <div className={className}>
       <Subheading>Pools</Subheading>
       <SpinContainer className="mt-4 min-h-40" spinning={isFetching}>
         <Table className="[--gutter:theme(spacing.6)] lg:[--gutter:theme(spacing.10)]">
@@ -110,6 +110,6 @@ export function PoolList({ owner }: Props) {
           </TableBody>
         </Table>
       </SpinContainer>
-    </>
+    </div>
   );
 }
