@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useBalanceQuery } from "../../app/api";
 import {
-  initialUntil,
+  initialLimit,
   LineChartDto,
   SpinContainer,
   Subheading,
@@ -29,13 +29,13 @@ const initialOption = quoteOptions[0];
 export function Balance() {
   const account = useCurrentAccount();
   const [quote, setQuote] = useState(initialOption);
-  const [until, setUntil] = useState(initialUntil);
+  const [limit, setLimit] = useState(initialLimit);
   const {
     data = defaultData,
     isFetching,
     isLoading,
   } = useBalanceQuery(
-    { index: quote.value, until, owner: account?.address || "" },
+    { index: quote.value, limit, owner: account?.address || "" },
     { skip: !account }
   );
 
@@ -60,7 +60,7 @@ export function Balance() {
           <LimitLineChart
             data={data}
             disabled={isFetching}
-            onChangeUntil={setUntil}
+            onChangeLimit={setLimit}
           />
         )}
       </SpinContainer>

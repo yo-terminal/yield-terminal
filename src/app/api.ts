@@ -37,13 +37,13 @@ export const api = createApi({
       }),
       invalidatesTags: ["Pool"],
     }),
-    balance: builder.query<LineChartDto, { index: number; until: number; owner: string }>({
+    balance: builder.query<LineChartDto, { index: number; limit: number; owner: string }>({
       query: (params) => ({
         params,
         url: "/balance",
       }),
     }),
-    profit: builder.query<LineChartDto, { index: number; until: number; owner: string }>({
+    profit: builder.query<LineChartDto, { index: number; limit: number; owner: string }>({
       query: (params) => ({
         params,
         url: "/profit",

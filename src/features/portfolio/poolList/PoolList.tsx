@@ -1,11 +1,9 @@
 import { Duration } from "luxon";
 import {
   AddressView,
-  // Avatar,
   BalanceValue,
   ProfitBadge,
   SpinContainer,
-  // Badge,
   Subheading,
   Table,
   TableBody,
@@ -42,24 +40,17 @@ export function PoolList({ owner, className }: Props) {
         <Table className="[--gutter:theme(spacing.6)] lg:[--gutter:theme(spacing.10)]">
           <TableHead>
             <TableRow>
-              {/* <TableHeader>Status</TableHeader> */}
               <TableHeader>Name</TableHeader>
               <TableHeader>Open</TableHeader>
-              {/* <TableHeader>Protocol</TableHeader> */}
               <TableHeader>Profit</TableHeader>
               <TableHeader>Balance</TableHeader>
-              <TableHeader>Address</TableHeader>
+              <TableHeader>Account</TableHeader>
               <TableHeader className="text-right">Action</TableHeader>
             </TableRow>
           </TableHead>
           <TableBody>
             {portfolioPools.map((pool) => (
               <TableRow key={pool._id} title={`Pool #${pool._id}`}>
-                {/* <TableCell>
-                <Badge color={pool.status === "Active" ? "lime" : "slate"}>
-                  {pool.status}
-                </Badge>
-              </TableCell> */}
                 <TableCell>
                   <PoolName
                     asset={pool.asset_symbol}
@@ -76,12 +67,6 @@ export function PoolList({ owner, className }: Props) {
                     ago
                   </Text>
                 </TableCell>
-                {/* <TableCell>
-                  <Avatar
-                    src={`/protocols/${pool.protocol}.png`}
-                    className="size-6"
-                  />
-                </TableCell> */}
                 <TableCell>
                   <ProfitBadge value={pool.position!.profit} percent />{" "}
                   <BalanceValue
