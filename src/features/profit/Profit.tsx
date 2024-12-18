@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useProfitQuery } from "../../app/api";
 import {
-  initialLimit,
   LineChartDto,
   SpinContainer,
   Subheading,
-  LimitLineChart,
+  LineChart,
   ToolBar,
   ToolRadioGroup,
   ToolRadio,
+  LimitToolBar,
+  initialLimitOption,
   // ToolButton,
 } from "@trade-project/ui-toolkit";
 // import { ArrowPathIcon } from "@heroicons/react/16/solid";
@@ -16,7 +17,6 @@ import { useCurrentAccount } from "@mysten/dapp-kit";
 import { Empty } from "./empty/Empty";
 
 const defaultData: LineChartDto = {
-  name: "",
   labels: [],
   dataset: [],
 };
@@ -31,21 +31,21 @@ const initialOption = quoteOptions[0];
 export function Profit() {
   const account = useCurrentAccount();
   const [quote, setQuote] = useState(initialOption);
-  const [limit, setLimit] = useState(initialLimit);
+  const [limit, setLimit] = useState(initialLimitOption);
   const {
     data = defaultData,
     isFetching,
     isLoading,
     // refetch,
   } = useProfitQuery(
-    { index: quote.value, limit, owner: account?.address || "" },
+    { index: quote.value, limit: limit.value, owner: account?.address || "" },
     { skip: !account }
   );
 
   return (
     <>
       <Subheading>Net Profit</Subheading>
-      <div className="flex justify-end gap-2">
+      <div className="mt-1 flex justify-end">
         <ToolBar>
           <ToolRadioGroup
             value={quote}
@@ -59,21 +59,15 @@ export function Profit() {
             ))}
           </ToolRadioGroup>
         </ToolBar>
-        {/* <ToolBar>
-          <ToolButton onClick={refetch}>
-            <ArrowPathIcon />
-          </ToolButton>
-        </ToolBar> */}
       </div>
-      <SpinContainer className="mt-2" spinning={isFetching}>
+      <div className="mt-1.5 flex justify-end">
+        <LimitToolBar disabled={isFetching} value={limit} onChange={setLimit} />
+      </div>
+      <SpinContainer className="mt-8" spinning={isFetching}>
         {data.dataset.length === 0 && !isLoading ? (
           <Empty />
         ) : (
-          <LimitLineChart
-            data={data}
-            disabled={isFetching}
-            onChangeLimit={setLimit}
-          />
+          <LineChart className="h-[600px]" data={data} />
         )}
       </SpinContainer>
     </>

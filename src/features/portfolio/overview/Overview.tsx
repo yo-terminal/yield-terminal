@@ -30,8 +30,8 @@ export function Overview({ owner, className }: Props) {
 
   return (
     <SpinContainer className={className} spinning={isFetching}>
-      <div className="flex items-end justify-between">
-        <Subheading>Overview</Subheading>
+      <Subheading>Overview</Subheading>
+      <div className="mt-1 flex justify-end">
         <ToolBar>
           <ToolRadioGroup
             value={quote}
@@ -46,7 +46,7 @@ export function Overview({ owner, className }: Props) {
           </ToolRadioGroup>
         </ToolBar>
       </div>
-      <div className="mt-4 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-2 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
         <Stat title="Net Value" value={data.balance} />
         <Stat title="Deposit" value={data.deposit} />
         <Stat

@@ -8,7 +8,7 @@ export function Portfolio() {
   return (
     <>
       {account && <Overview owner={account.address} />}
-      {account && <PoolList className="mt-14 mb-7" owner={account.address} />}
+      {account && <PoolList className="mt-16 mb-7" owner={account.address} />}
     </>
   );
 }

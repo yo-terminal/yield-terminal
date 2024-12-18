@@ -1522,10 +1522,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.8.6.tgz#ccecf84099a9a0e9732b4f17bf021b82f215d15e"
   integrity sha512-UJeU4SBrx3hqULNzJ3oC0kgJ5miIAg+FwomxMTlQNxob6ppTInifANHd9ukETvzdzxr6zt3CjQ0rttQpVjbt6Q==
 
-"@trade-project/ui-toolkit@^0.0.15":
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/@trade-project/ui-toolkit/-/ui-toolkit-0.0.15.tgz#854868c463b54e9a34b95e08b76ef82c9b282703"
-  integrity sha512-aX6lD+n3NWmSnPTmMgR0jh3bEaZlP/K7in73cfWjnW+5SNLDDN/6u/cWRkjWGMVWcIL1+awdhgSZPKO2W3xbHg==
+"@trade-project/ui-toolkit@^0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@trade-project/ui-toolkit/-/ui-toolkit-0.0.17.tgz#9ebfcc407dde5a319f27e7abdeec2deec3c5b46a"
+  integrity sha512-h14Y92/TJXO5FRVYIYHt9SDEC5EH7ljvcuBhszyj22IQeV5GuIDhq7PT+IuYB+uhnhFRcdD/f+NQwMT46M6svQ==
   dependencies:
     "@headlessui/react" "^2.1.6"
     "@heroicons/react" "^2.1.3"
